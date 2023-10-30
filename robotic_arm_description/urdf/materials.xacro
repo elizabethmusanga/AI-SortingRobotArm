@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<robot name="robotic_arm" xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+<material name="silver_default">
+  <color rgba="0.700 0.700 0.700 1.000"/>
+</material>
+
+<material name="oak">
+  <color rgba="0.7098 0.5882 0.4431 1.000"/>
+</material>
+
+<material name="pa_12_nylon_pa_603cf_with_eos_p_3d_printers">
+  <color rgba="0.24705882352941178 0.24705882352941178 0.24705882352941178 1.0"/>
+</material>
+
+</robot>

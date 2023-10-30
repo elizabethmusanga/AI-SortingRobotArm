@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding = "UTF-8"?>
+
+<robot name="robotic_arm" xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+<xacro:property name="base_color" value = "Gazebo/Oak"/>
+<xacro:property name="waist_color" value = "Gazebo/FlatBlack" />
+<xacro:property name="link_1_color" value = "Gazebo/FlatBlack"/>
+<xacro:property name="link_2_color" value = "Gazebo/FlatBlack" />
+<xacro:property name="gripper_base_color" value = "Gazebo/FlatBlack" />
+<xacro:property name="motor_color" value="Gazebo/Blue" />
+<xacro:property name="gripper_gears" value="GazeboGrey"/>
+<xacro:property name="gripper_color" value="Gazebo/DarkGrey" />
+
+
+<gazebo>
+      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+            <robot_param>robot_description</robot_param>
+            <robot_param_node>robot_state_publisher</robot_param_node>
+          <parameters>$(find robotic_arm_controllers)/config/robot_arm_controllers.yaml</parameters>
+      </plugin>
+</gazebo>
+
+<gazebo reference="base_link">
+  <material>${base_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+  <gravity>true</gravity>
+</gazebo>
+
+<gazebo reference="base">
+  <material>${waist_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="waist_v6_1">
+  <material>${waist_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="link_1">
+  <material>${link_1_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="link_2a_v4_1">
+  <material>${link_2_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="link_2b_v4_1">
+  <material>${link_2_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="gripper_base_v8_1">
+  <material>${gripper_base_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+
+<gazebo reference="servomotormicro9g_v2_1">
+  <material>${motor_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="servomotormg996r_v2_2">
+  <material>${motor_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="servomotormicro9g_v2_2">
+  <material>${motor_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="servomotormg996r_v2_3">
+  <material>${motor_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="gripper_gear_1_v2_1">
+  <material>${gripper_gears}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="gripper_gear_2_v2_1">
+  <material>${gripper_gears}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="gripper_v3_1">
+  <material>${gripper_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="gripper_v3_2">
+  <material>${gripper_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="gripper_v3_3">
+  <material>${gripper_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+<gazebo reference="gripper_v3_4">
+  <material>${gripper_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <self_collide>true</self_collide>
+</gazebo>
+
+
+</robot>
