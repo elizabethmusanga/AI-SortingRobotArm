@@ -2,7 +2,7 @@
 
 import json
 
-data = ' {"joint_1":0,"joint_2":0,"joint_3":30,"joint_4":0} '
+data = ' {"base_waist_joint":0,"waist_link1_joint":0,"link1_link2_joint":30,"right_gripper_joint":0} '
 
 joint_angles = json.loads(data)
 
@@ -11,15 +11,15 @@ print(f"Jointangles = {joint_angles}\n")
 
 
 def assign_values(joint_angles:dict):
-    joint_1 = 1.250
-    joint_2 = 1.001
-    joint_3 = 1.245
-    joint_4 = 0.122
+    base_waist_joint = 1.250
+    waist_link1_joint = 1.001
+    link1_link2_joint = 1.245
+    right_gripper_joint = 0.122
 
-    joint_angles["joint_1"]= joint_1
-    joint_angles["joint_2"]= joint_2
-    joint_angles["joint_3"]= joint_3
-    joint_angles["joint_4"]= joint_4
+    joint_angles["base_waist_joint"]= base_waist_joint
+    joint_angles["waist_link1_joint"]= waist_link1_joint
+    joint_angles["link1_link2_joint"]= link1_link2_joint
+    joint_angles["right_gripper_joint"]= right_gripper_joint
     
     return joint_angles
     

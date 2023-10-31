@@ -8,7 +8,7 @@ from std_msgs.msg import String
 
 
 # Data format of the joint angles to be send serialized to arduino
-joint_angles =     '''{"joint_1":10,"joint_2":20,"joint_3":30,"joint_4":40}'''
+joint_angles =     '''{"base_waist_joint":10,"waist_link1_joint":20,"link1_link2_joint":30,"right_gripper_joint":40}'''
 
 
 
@@ -20,10 +20,10 @@ class SerialTransmitter(Node):
         self.declare_parameter("baudrate", 115200)
         
         # Variables to store joint angles
-        self.joint_1 = 0.0
-        self.joint_2 = 0.0
-        self.joint_3 = 0.0
-        self.joint_4 = 0.0
+        self.base_waist_joint = 0.0
+        self.waist_link1_joint = 0.0
+        self.link1_link2_joint = 0.0
+        self.right_gripper_joint = 0.0
 
         self.port_ = self.get_parameter("port").value
         self.baudrate_ = self.get_parameter("baudrate").value
@@ -45,20 +45,20 @@ class SerialTransmitter(Node):
     # Publisher callback function
     def publish_joint_angles(self):
         joint_angles = String()
-        joint_angles = f'''  "joint_1":  {self.joint_1},
-                            "joint_2":  {self.joint_2},
-                            "joint_3":  {self.joint_3},
-                            "joint_4":  {self.joint_4}
+        joint_angles = f'''  "base_waist_joint":  {self.base_waist_joint},
+                            "waist_link1_joint":  {self.waist_link1_joint},
+                            "link1_link2_joint":  {self.link1_link2_joint},
+                            "right_gripper_joint":  {self.right_gripper_joint}
                         '''
         self.publisher.publish(joint_angles)
      
      # Subscriotion callback   
     def get_joint_angles(self, msg: JointTrajectory):
         self.get_logger().info(f"Joints angles = {msg.points}")
-        self.joint_1 = msg.points[0]
-        self.joint_2 = msg.points[1]
-        self.joint_3 = msg.points[2]
-        self.joint_4 = msg.points[3]
+        self.base_waist_joint = msg.points[0]
+        self.waist_link1_joint = msg.points[1]
+        self.link1_link2_joint = msg.points[2]
+        self.right_gripper_joint = msg.points[3]
         
     def msg_callback(self, msg):
         self.get_logger().info("New message received, publishing on serial: %s" % self.arduino_serial.name)
