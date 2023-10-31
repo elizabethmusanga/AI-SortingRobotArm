@@ -5,10 +5,26 @@
 <xacro:property name="gripper_angle" value="0.7854"/>
 <xacro:property name="PI" value="3.14159"/>
 
-<ros2_control type = "system" name = "RoboticArmSystem">
+<xacro:if value = "$(arg is_sim)">
     <hardware>
         <plugin>gazebo_ros2_control/GazeboSystem</plugin>
     </hardware>
+
+</xacro:if>
+
+<xacro:unless value = "$(arg is_sim)">
+    <hardware>
+        <plugin>robotic_arm_hw/RoboticArmHWInterface</plugin>
+
+        <!-- Change the port here -->
+        <param name ="port">/dev/ttyUSB0</param>
+
+    </hardware>
+</xacro:unless>
+
+
+
+<ros2_control type = "system" name = "RoboticArmSystem">
 
 <!-- Interfaces -->
     <joint name="base_waist_joint">
@@ -60,6 +76,7 @@
         </command_interface>
         <state_interface name="position"/>
     </joint>
+
  </ros2_control>
     
 </robot>

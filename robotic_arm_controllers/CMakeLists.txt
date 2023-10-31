@@ -7,13 +7,70 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(hardware_interface REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
+find_package(pluginlib REQUIRED)
+find_package(PkgConfig REQUIRED)
+
+pkg_check_modules(SERIAL libserial)
+
+add_library(
+  ${PROJECT_NAME} SHARED
+  src/robotic_arm_hwinterface.cpp
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+  include
+  "${SERIAL_INCLUDE_DIRS}"
+)
+
+target_link_libraries(
+  ${PROJECT_NAME}
+  "${SERIAL_LDFLAGS}"
+)
+
+ament_target_dependencies(${PROJECT_NAME}
+  rclcpp_lifecycle
+  rclcpp
+  pluginlib
+  hardware_interface
+)
+
+# Compile register a plugin
+pluginlib_export_plugin_description_file(
+  hardware_interface robotic_arm_controllers.xml
+)
 
 install(DIRECTORY 
     launch config
   DESTINATION share/${PROJECT_NAME}
+)
+
+install(
+  TARGETS ${PROJECT_NAME}
+  DESTINATION lib
+)
+
+install(
+  DIRECTORY include
+  DESTINATION
+)
+
+
+ament_export_include_directories(
+  include()
+)
+
+ament_export_libraries(
+  ${PROJECT_NAME}
+)
+
+ament_export_dependencies(
+  rclcpp_lifecycle
+  rclcpp
+  pluginlib
+  hardware_interface  
 )
 
 if(BUILD_TESTING)

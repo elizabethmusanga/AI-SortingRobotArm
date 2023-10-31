@@ -1,14 +1,16 @@
 <?xml version="1.0" ?>
 <robot name="robotic_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+<!-- Load Simulated or Real Hardware Interfaces -->
+<xacro:arg name="is_sim" default="true"/>
+
 <xacro:include filename="$(find robotic_arm_description)/urdf/materials.xacro" />
 <xacro:include filename="$(find robotic_arm_description)/urdf/robotic_arm.trans" />
 <xacro:include filename="$(find robotic_arm_description)/urdf/robotic_arm_gazebo.xacro"/>
 <xacro:include filename="$(find robotic_arm_description)/urdf/robotic_arm_controllers.xacro"/>
 
 <!-- Properties -->
-<xacro:property name="PI" value="1.570796"/>
-
+<xacro:property name="PI" value="1.570796"/>\
 
 <!-- Links -->
 <link name = "world"/>

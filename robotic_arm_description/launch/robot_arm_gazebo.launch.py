@@ -11,11 +11,12 @@ xacro_file = "robotic_arm.xacro"
 
 def generate_launch_description():
     description_package = os.path.join(get_package_share_directory(package_name))
-    
+
+
     model_arg = DeclareLaunchArgument(
         name = "model",
         default_value=os.path.join(description_package, "urdf", xacro_file),
-        description= "Absolute path to the URDF file"
+        description= "Absolute path to the URDF file",
     )
     
     #
@@ -42,13 +43,6 @@ def generate_launch_description():
         
     )
     
-    ################################################################
-    gazebo_node = ExecuteProcess(
-    cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_factory.so'],
-    output='screen'
-)   #################################################################
-
-
     # Robot state publisher node
     robot_state_publisher = Node(
         package = "robot_state_publisher",
@@ -68,7 +62,6 @@ def generate_launch_description():
         env_var,
         model_arg,
         robot_state_publisher,
-        #gazebo_node,
         gazebo_serve,
         gazebo_client,
         spawner_node,
