@@ -34,23 +34,12 @@
   </actuator>
 </transmission>
 
-<transmission name="link2_gripper_base_joint_tran">
+<transmission name="link2_gipper_base_joint_tran">
   <type>transmission_interface/SimpleTransmission</type>
-  <joint name="link2_gripper_base_joint">
+  <joint name="link2_gipper_base_joint">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
   </joint>
-  <actuator name="link2_gripper_base_joint_actr">
-    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
-  </actuator>
-</transmission>
-
-<transmission name="left_gripper_joint_tran">
-  <type>transmission_interface/SimpleTransmission</type>
-  <joint name="left_gripper_joint">
-    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-  </joint>
-  <actuator name="left_gripper_joint_actr">
+  <actuator name="link2_gipper_base_joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
@@ -62,6 +51,17 @@
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
   </joint>
   <actuator name="right_gripper_joint_actr">
+    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<transmission name="left_gripper_joint_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="left_gripper_joint">
+    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="left_gripper_joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
