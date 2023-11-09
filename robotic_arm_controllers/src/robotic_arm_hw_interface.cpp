@@ -1,4 +1,4 @@
-#include "robotic_arm_controllers/robotic_arm_hwinterface.hpp"
+#include "robotic_arm_controllers/robotic_arm_hw_interface.hpp"
 #include <hardware_interface/types/hardware_interface_type_values.hpp>
 #include <pluginlib/class_list_macros.hpp>
 

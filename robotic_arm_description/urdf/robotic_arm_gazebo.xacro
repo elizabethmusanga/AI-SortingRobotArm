@@ -2,16 +2,14 @@
 
 <robot name="robotic_arm" xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
-<xacro:property name="base_color" value = "Gazebo/Oak"/>
-<xacro:property name="waist_color" value = "Gazebo/FlatBlack" />
+<xacro:property name="base_color" value =  "Gazebo/Wood"/>
+<xacro:property name="waist_color" value = "Gazebo/FlatBlack"/>
 <xacro:property name="link_1_color" value = "Gazebo/FlatBlack"/>
 <xacro:property name="link_2_color" value = "Gazebo/FlatBlack" />
 <xacro:property name="gripper_base_color" value = "Gazebo/FlatBlack" />
-<xacro:property name="gripper_gears" value="GazeboGrey"/>
-<xacro:property name="gripper_color" value="Gazebo/DarkGrey"/>
-<xacro:property name="camera_color" value="Gazebo/Oak" />
+<xacro:property name="gripper_gears" value="Gazebo/Blue"/>
+<xacro:property name="camera_color" value="Gazebo/WoodFloor" />
 <xacro:property name="container_color" value="Gazebo/Red" />
-
 
   <gazebo reference="base_link">
     <material>${base_color}</material>
@@ -77,7 +75,7 @@
     <self_collide>true</self_collide>
   </gazebo>
 
-  <gazebo reference="container_1">
+  <gazebo reference="container_cubes">
     <material>${container_color}</material>
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
@@ -85,14 +83,14 @@
   </gazebo>
 
 
-  <gazebo reference="container_2">
+  <gazebo reference="container_cylinders">
     <material>${container_color}</material>
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
     <self_collide>true</self_collide>
   </gazebo>
 
-  <gazebo reference="container_3">
+  <gazebo reference="container_hexagons">
     <material>${container_color}</material>
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>

@@ -2,7 +2,7 @@ controller_manager:
   ros__parameters:
     update_rate: 1000
 
-    robot_joints_joint_trajectory_controller:
+    robotic_arm_joint_trajectory_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
     gripper_controller:
@@ -12,7 +12,7 @@ controller_manager:
       type: joint_state_broadcaster/JointStateBroadcaster
 
 # Robot joints trajectory controllers
-robot_joints_joint_trajectory_controller:
+robotic_arm_joint_trajectory_controller:
   ros__parameters:
     joints:
       - base_waist_joint
@@ -20,7 +20,6 @@ robot_joints_joint_trajectory_controller:
       - link1_link2_joint
       - link2_gripper_base_joint
     
-
     interface_name: position
     command_interfaces:
       - position

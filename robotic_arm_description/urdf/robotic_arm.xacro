@@ -1,11 +1,18 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding = "UTF-8"?>
 <robot name="robotic_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
 <!-- Load Simulated or Real Hardware Interfaces -->
+<xacro:arg name="sim_mode" default="true"/>
+
+<!-- Include materials properties to be used with rviz -->
 <xacro:include filename="$(find robotic_arm_description)/urdf/materials.xacro" />
+
 <xacro:include filename="$(find robotic_arm_description)/urdf/robotic_arm.trans" />
+<!-- Include material properties to be used in gazebo -->
 <xacro:include filename="$(find robotic_arm_description)/urdf/robotic_arm_gazebo.xacro"/>
-<xacro:include filename="$(find robotic_arm_description)/urdf/robotic_arm_controllers.xacro"/>
+
+<!-- Include ros2_control plugin-->
+<xacro:include filename="$(find robotic_arm_description)/urdf/robotic_arm_ros2_control.xacro"/>
 
 <!-- Properties -->
 <xacro:property name="PI" value="1.570796"/>
@@ -34,7 +41,7 @@
   </collision>
 </link>
 
-<link name="container_1">
+<link name="container_cubes">
   <inertial>
     <origin xyz="0.0021344768560282723 -1.5647124724599282e-05 0.026103286200414536" rpy="0 0 0"/>
     <mass value="0.8859344258495231"/>
@@ -43,19 +50,19 @@
   <visual>
     <origin xyz="0.2025 0.225 -0.035" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://robotic_arm_description/meshes/container_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="package://robotic_arm_description/meshes/container_cubes.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="led_red"/>
   </visual>
   <collision>
     <origin xyz="0.2025 0.225 -0.035" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://robotic_arm_description/meshes/container_1.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="package://robotic_arm_description/meshes/container_cubes.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
 
-<link name="container_2">
+<link name="container_cylinders">
   <inertial>
     <origin xyz="-1.565155782010108e-05 -0.0021344802460424653 0.026103286200414424" rpy="0 0 0"/>
     <mass value="0.8859344258495231"/>
@@ -64,19 +71,19 @@
   <visual>
     <origin xyz="0.2425 0.02 -0.035" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://robotic_arm_description/meshes/container_2.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="package://robotic_arm_description/meshes/container_cylinders.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="led_red"/>
   </visual>
   <collision>
     <origin xyz="0.2425 0.02 -0.035" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://robotic_arm_description/meshes/container_2.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="package://robotic_arm_description/meshes/container_cylinders.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
 
-<link name="container_3">
+<link name="container_hexagons">
   <inertial>
     <origin xyz="-1.565155782010108e-05 -0.0021344802460424445 0.0261032862004145" rpy="0 0 0"/>
     <mass value="0.8859344258495231"/>
@@ -85,14 +92,14 @@
   <visual>
     <origin xyz="0.1375 0.02 -0.035" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://robotic_arm_description/meshes/container_3.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="package://robotic_arm_description/meshes/container_hexagons.stl" scale="0.001 0.001 0.001"/>
     </geometry>
     <material name="led_red"/>
   </visual>
   <collision>
     <origin xyz="0.1375 0.02 -0.035" rpy="0 0 0"/>
     <geometry>
-      <mesh filename="package://robotic_arm_description/meshes/container_3.stl" scale="0.001 0.001 0.001"/>
+      <mesh filename="package://robotic_arm_description/meshes/container_hexagons.stl" scale="0.001 0.001 0.001"/>
     </geometry>
   </collision>
 </link>
@@ -265,9 +272,9 @@
   </collision>
 </link>
 
+<!-- Joints -->
 
 <joint name = "virtual_joint" type= "fixed">
-  <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
   <parent link="world"/>
   <child link="base_link"/>
 </joint>
@@ -281,19 +288,19 @@
 <joint name="rigid_2" type="fixed">
   <origin xyz="-0.2025 -0.225 0.035" rpy="0 0 0"/>
   <parent link="base_link"/>
-  <child link="container_1"/>
+  <child link="container_cubes"/>
 </joint>
 
 <joint name="rigid_3" type="fixed">
   <origin xyz="-0.2425 -0.02 0.035" rpy="0 0 0"/>
   <parent link="base_link"/>
-  <child link="container_2"/>
+  <child link="container_cylinders"/>
 </joint>
 
 <joint name="rigid_4" type="fixed">
   <origin xyz="-0.1375 -0.02 0.035" rpy="0 0 0"/>
   <parent link="base_link"/>
-  <child link="container_3"/>
+  <child link="container_hexagons"/>
 </joint>
 
 <joint name="rigid_5" type="fixed">
@@ -326,7 +333,7 @@
   <limit upper="1.570796" lower="-1.570796" effort="100" velocity="100"/>
 </joint>
 
-<joint name="link2_gipper_base_joint" type="revolute">
+<joint name="link2_gripper_base_joint" type="revolute">
   <origin xyz="0.00385 -0.11735 0.0003" rpy="0 0 0"/>
   <parent link="link_2"/>
   <child link="gripper_base"/>
@@ -349,8 +356,8 @@
   <child link="gripper_finger_2"/>
   <axis xyz="-0.0 0.0 1.0"/>
   <dynamics damping="10.0" friction="2.0"/>
-  <mimic joint = "right_gripper_joint" multiplier = "-1.0"/>
   <limit upper="0.0" lower="-1.047198" effort="100" velocity="100"/>
+  <mimic joint = "right_gripper_joint" multiplier = "-1"/>
 </joint>
 
 

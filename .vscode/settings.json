@@ -1,3 +1,4 @@
 {
-    "ros.distro": "humble"
+    "ros.distro": "humble",
+    "cmake.sourceDirectory": "/home/newtonjeri/ai_based_sorting_robot_arm/src/AI-SortingRobotArm/robotic_arm_controllers"
 }

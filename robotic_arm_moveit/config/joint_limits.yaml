@@ -11,30 +11,30 @@ joint_limits:
   base_waist_joint:
     has_velocity_limits: true
     max_velocity: 10.0
-    has_acceleration_limits: true
-    max_acceleration: 5.0
-  waist_link1_joint:
-    has_velocity_limits: true
-    max_velocity: 10.0
-    has_acceleration_limits: true
-    max_acceleration: 5.0
-  link1_link2_joint:
-    has_velocity_limits: true
-    max_velocity: 10.0
-    has_acceleration_limits: true
-    max_acceleration: 5.0
-  link2_gripper_base_joint:
-    has_velocity_limits: true
-    max_velocity: 10.0
-    has_acceleration_limits: true
-    max_acceleration: 5.0
-  right_gripper_joint:
-    has_velocity_limits: true
-    max_velocity: 10.0
-    has_acceleration_limits: true
+    has_acceleration_limits: false
     max_acceleration: 5.0
   left_gripper_joint:
     has_velocity_limits: true
     max_velocity: 10.0
-    has_acceleration_limits: true
+    has_acceleration_limits: false
+    max_acceleration: 5.0
+  link1_link2_joint:
+    has_velocity_limits: true
+    max_velocity: 10.0
+    has_acceleration_limits: false
+    max_acceleration: 5.0
+  link2_gipper_base_joint:
+    has_velocity_limits: true
+    max_velocity: 10.0
+    has_acceleration_limits: false
+    max_acceleration: 5.0
+  right_gripper_joint:
+    has_velocity_limits: true
+    max_velocity: 10.0
+    has_acceleration_limits: false
+    max_acceleration: 5.0
+  waist_link1_joint:
+    has_velocity_limits: true
+    max_velocity: 10.0
+    has_acceleration_limits: false
     max_acceleration: 5.0

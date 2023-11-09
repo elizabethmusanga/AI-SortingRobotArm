@@ -9,10 +9,10 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
 
-    is_sim = LaunchConfiguration('is_sim')
+    sim_mode = LaunchConfiguration('sim_mode')
     
     is_sim_arg = DeclareLaunchArgument(
-        'is_sim',
+        'sim_mode',
         default_value='True'
     )
 
@@ -21,7 +21,7 @@ def generate_launch_description():
         .robot_description(file_path=os.path.join(
             get_package_share_directory("robotic_arm_description"),
             "urdf",
-            "robotic_arm.urdf.xacro"
+            "robotic_arm.xacro"
             )
         )
         .robot_description_semantic(file_path="config/robotic_arm.srdf")
@@ -34,7 +34,7 @@ def generate_launch_description():
         executable="move_group",
         output="screen",
         parameters=[moveit_config.to_dict(), 
-                    {'use_sim_time': is_sim},
+                    {'use_sim_time': sim_mode},
                     {'publish_robot_description_semantic': True}],
         arguments=["--ros-args", "--log-level", "info"],
     )

@@ -19,7 +19,7 @@ def generate_launch_description():
                 "launch",
                 "robot_arm_controllers.launch.py"
             ),
-            launch_arguments={"is_sim": "True"}.items()
+            launch_arguments={"sim_mode": "True"}.items()
         )
     
     # moveit = IncludeLaunchDescription(
@@ -28,7 +28,7 @@ def generate_launch_description():
     #             "launch",
     #             "moveit.launch.py"
     #         ),
-    #         launch_arguments={"is_sim": "True"}.items()
+    #         launch_arguments={"sim_mode": "True"}.items()
     #     )
     
     # remote_interface = IncludeLaunchDescription(

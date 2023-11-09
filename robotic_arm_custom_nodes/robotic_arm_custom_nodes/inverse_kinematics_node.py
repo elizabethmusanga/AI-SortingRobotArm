@@ -13,7 +13,7 @@ class Trajectory_publisher(Node):
         # trajectory publisher node
         super().__init__('trajectory_publisher_node')
         # Topic to publish to
-        publish_topic = "/robot_joints_joint_trajectory_controller/joint_trajectory"
+        publish_topic = "/robotic_arm_joint_trajectory_controller/joint_trajectory"
         # Creating the trajectory publisher
         self.trajectory_publisher = self.create_publisher(JointTrajectory, publish_topic, 10)
         timer_period = 1.0
@@ -28,7 +28,7 @@ class Trajectory_publisher(Node):
                         ]
                             
         # Path to the share directory
-        robotic_arm_description_pkg = '/home/newtonjeri/ai_based_sorting_robot_arm/src/robotic_arm_description'
+        robotic_arm_description_pkg = "/home/newtonjeri/ai_based_sorting_robot_arm/src/AI-SortingRobotArm/robotic_arm_description"
         
         # urdf file
         urdf_file = os.path.join(robotic_arm_description_pkg, "urdf", "robotic_arm_urdf.urdf")

@@ -9,18 +9,19 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(hardware_interface REQUIRED)
-find_package(rclcpp_lifecycle REQUIRED)
 find_package(pluginlib REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
 find_package(PkgConfig REQUIRED)
 
 pkg_check_modules(SERIAL libserial)
 
 add_library(
   ${PROJECT_NAME} SHARED
-  src/robotic_arm_hwinterface.cpp
+  src/robotic_arm_hw_interface.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PRIVATE
+target_include_directories(
+  ${PROJECT_NAME} PRIVATE
   include
   "${SERIAL_INCLUDE_DIRS}"
 )
@@ -37,15 +38,14 @@ ament_target_dependencies(${PROJECT_NAME}
   hardware_interface
 )
 
-# Compile register a plugin
-pluginlib_export_plugin_description_file(
-  hardware_interface robotic_arm_controllers.xml
-)
+pluginlib_export_plugin_description_file(hardware_interface robotic_arm_hw_plugin.xml)
 
-install(DIRECTORY 
-    launch config
-  DESTINATION share/${PROJECT_NAME}
-)
+ament_python_install_package(${PROJECT_NAME})
+
+# install(TARGETS
+#   slider_control
+#   DESTINATION lib/${PROJECT_NAME}
+# )
 
 install(
   TARGETS ${PROJECT_NAME}
@@ -54,9 +54,18 @@ install(
 
 install(
   DIRECTORY include
-  DESTINATION
+  DESTINATION include
 )
 
+install(
+  DIRECTORY launch config
+  DESTINATION share/${PROJECT_NAME}
+)
+
+# install(PROGRAMS
+#   ${PROJECT_NAME}/slider_control.py
+#   DESTINATION lib/${PROJECT_NAME}
+# )
 
 ament_export_include_directories(
   include()
