@@ -1,54 +1,48 @@
 import os
-import xacro
-from launch import LaunchDescription
-from launch_ros.actions import Node
-from launch.actions import DeclareLaunchArgument
 from ament_index_python.packages import get_package_share_directory
 
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import Command, LaunchConfiguration
 
-package_name = "robotic_arm_description"
-xacro_file = "robotic_arm.xacro"
+from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
+
 
 def generate_launch_description():
-    
-    model_arg = DeclareLaunchArgument(
-        name = "model",
-        default_value=os.path.join(get_package_share_directory(package_name), "urdf", xacro_file),
-        description= "Absolute path to the URDF file"
-    )   
-    
-    # Xacro file path
-    xacro_file_path = os.path.join(get_package_share_directory(package_name), "urdf", xacro_file)
-    
-    # Convert xacro to xml format
-    robot_description_config = xacro.process_file(xacro_file_path)
-    
-    # robot description
-    robot_description = robot_description_config.toxml()
+    robotic_arm_description_dir = get_package_share_directory('robotic_arm_description')
 
-    robot_state_publisher = Node(
-        package = "robot_state_publisher",
-        executable = "robot_state_publisher",
-        parameters =[{"robot_description": robot_description}]
+    model_arg = DeclareLaunchArgument(name='model', 
+                                      default_value=os.path.join(
+                                                    robotic_arm_description_dir, 'urdf', 'robotic_arm.urdf.xacro'
+                                                    ),
+                                      description='Absolute path to robot urdf file')
+
+    robot_description = ParameterValue(Command(['xacro ', LaunchConfiguration('model')]),
+                                       value_type=str)
+
+    robot_state_publisher_node = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        parameters=[{'robot_description': robot_description}]
     )
-    
-    joint_state_publisher_gui = Node(
-        package= "joint_state_publisher_gui",
-        executable = "joint_state_publisher_gui",
+
+    joint_state_publisher_gui_node = Node(
+        package='joint_state_publisher_gui',
+        executable='joint_state_publisher_gui'
     )
-    
+
     rviz_node = Node(
-        package= "rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output = "screen",
-        arguments = ["-d", os.path.join(get_package_share_directory(package_name), "rviz", "display.rviz")]
-        
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        arguments=['-d', os.path.join(robotic_arm_description_dir, 'rviz', 'display.rviz')],
     )
-    
+
     return LaunchDescription([
         model_arg,
-        robot_state_publisher,
-        joint_state_publisher_gui,
+        joint_state_publisher_gui_node,
+        robot_state_publisher_node,
         rviz_node
     ])
