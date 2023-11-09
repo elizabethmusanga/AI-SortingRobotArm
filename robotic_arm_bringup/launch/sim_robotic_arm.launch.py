@@ -22,14 +22,14 @@ def generate_launch_description():
             launch_arguments={"sim_mode": "True"}.items()
         )
     
-    # moveit = IncludeLaunchDescription(
-    #         os.path.join(
-    #             get_package_share_directory("robotic_arm_moveit"),
-    #             "launch",
-    #             "moveit.launch.py"
-    #         ),
-    #         launch_arguments={"sim_mode": "True"}.items()
-    #     )
+    moveit = IncludeLaunchDescription(
+            os.path.join(
+                get_package_share_directory("robotic_arm_moveit"),
+                "launch",
+                "moveit.launch.py"
+            ),
+            launch_arguments={"sim_mode": "True"}.items()
+        )
     
     # remote_interface = IncludeLaunchDescription(
     #         os.path.join(
@@ -42,6 +42,6 @@ def generate_launch_description():
     return LaunchDescription([
         gazebo,
         controllers,
-        #moveit,
+        moveit,
         #remote_interface,
     ])
