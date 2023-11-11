@@ -10,7 +10,7 @@
 #include <vector>
 #include <string>
 
-namespace robotic_arm_hw
+namespace robotic_arm_controllers
 {
     using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 

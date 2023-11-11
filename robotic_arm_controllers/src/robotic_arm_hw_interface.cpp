@@ -3,7 +3,7 @@
 #include <pluginlib/class_list_macros.hpp>
 
 
-namespace robotic_arm_hw
+namespace robotic_arm_controllers
 {
 RoboticArmHWInterface::RoboticArmHWInterface()
 {
@@ -37,7 +37,7 @@ CallbackReturn RoboticArmHWInterface::on_init(const hardware_interface::Hardware
 
   try
   {
-    port_ = info_.hardware_parameters.at("port");
+    port_ = info_.hardware_parameters.at("port_");
   }
   catch (const std::out_of_range &e)
   {
@@ -196,4 +196,4 @@ hardware_interface::return_type RoboticArmHWInterface::write(const rclcpp::Time 
 }
 }  // namespace robotic_arm_hwinterface
 
-PLUGINLIB_EXPORT_CLASS(robotic_arm_hw::RoboticArmHWInterface, hardware_interface::SystemInterface)
+PLUGINLIB_EXPORT_CLASS(robotic_arm_controllers::RoboticArmHWInterface, hardware_interface::SystemInterface)

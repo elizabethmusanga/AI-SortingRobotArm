@@ -71,7 +71,7 @@
     <hardware>
         <plugin>robotic_arm_controllers/RoboticArmHWInterface</plugin>
         <param name="port_">/dev/ttyUSB0</param>
-        <param name="baud_rate">115500</param>
+        <param name="baud_rate">115200</param>
     </hardware>
 
     <!-- Interfaces -->

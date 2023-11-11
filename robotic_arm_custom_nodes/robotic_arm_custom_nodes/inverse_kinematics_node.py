@@ -7,6 +7,7 @@ import ikpy.chain
 import sys 
 import numpy as np
 import os
+from ament_index_python.packages import get_package_share_directory
 
 class Trajectory_publisher(Node):
     def __init__(self):
@@ -26,12 +27,10 @@ class Trajectory_publisher(Node):
                         "link1_link2_joint",
                         "link2_gripper_base_joint"
                         ]
-                            
-        # Path to the share directory
-        robotic_arm_description_pkg = "/home/newtonjeri/ai_based_sorting_robot_arm/src/AI-SortingRobotArm/robotic_arm_description"
-        
-        # urdf file
-        urdf_file = os.path.join(robotic_arm_description_pkg, "urdf", "robotic_arm_urdf.urdf")
+
+
+        # URDF file of the robot
+        urdf_file = os.path.join(get_package_share_directory("robotic_arm_description"), "urdf", "robotic_arm_urdf.urdf")  
         
         ## Toolbox interface
         self.robot_initialize(urdf_file)

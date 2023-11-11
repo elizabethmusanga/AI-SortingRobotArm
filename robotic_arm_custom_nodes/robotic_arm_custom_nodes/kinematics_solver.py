@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
+import os
 import ikpy.chain
-from ament_index_python.packages import get_package_share_directory
 
-# urdf file
 urdf_file="/home/newtonjeri/ai_based_sorting_robot_arm/src/AI-SortingRobotArm/robotic_arm_description/urdf/robotic_arm_urdf.urdf"
 
 robotic_arm = ikpy.chain.Chain.from_urdf_file(urdf_file, active_links_mask=[False, False, True, True, True, True, False])
