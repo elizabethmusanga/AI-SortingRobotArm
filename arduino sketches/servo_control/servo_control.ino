@@ -1,11 +1,11 @@
 #include <Servo.h>
 
 // Declare the Arduino pin where each servo is connected
-#define BASE_WAIST_SERVO_PIN 8
-#define WAIST_LINK1_SERVO_PIN 9
-#define L1_L2_SERVO_PIN 10
-#define L2_GRIPPER_BASE_SERVO_PIN 11
-#define GRIPPER_SERVO_PIN 12
+#define BASE_WAIST_SERVO_PIN 11
+#define WAIST_LINK1_SERVO_PIN 12
+#define L1_L2_SERVO_PIN 13
+#define L2_GRIPPER_BASE_SERVO_PIN 6
+#define GRIPPER_SERVO_PIN 2
 
 // Define the start configuration of the joints
 #define BASE_WAIST_START 90

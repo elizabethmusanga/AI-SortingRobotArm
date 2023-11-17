@@ -14,11 +14,11 @@ def generate_launch_description():
             launch_arguments={"sim_mode": "False"}.items()
         )
     
-    moveit = IncludeLaunchDescription(
+    rviz = IncludeLaunchDescription(
             os.path.join(
-                get_package_share_directory("robotic_arm_moveit"),
+                get_package_share_directory("robotic_arm_description"),
                 "launch",
-                "moveit.launch.py"
+                "robot_arm_display.launch.py"
             ),
             launch_arguments={"sim_mode": "False"}.items()
         )
@@ -33,6 +33,6 @@ def generate_launch_description():
     
     return LaunchDescription([
         controllers,
-        moveit,
+        rviz,
         # remote_interface,
     ])

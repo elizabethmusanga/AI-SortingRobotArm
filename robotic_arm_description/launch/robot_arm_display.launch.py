@@ -14,18 +14,14 @@ def generate_launch_description():
 
     model_arg = DeclareLaunchArgument(name='model', 
                                       default_value=os.path.join(
-                                                    robotic_arm_description_dir, 'urdf', 'robotic_arm.urdf.xacro'
+                                                    robotic_arm_description_dir, 'urdf', 'robotic_arm.xacro'
                                                     ),
                                       description='Absolute path to robot urdf file')
 
     robot_description = ParameterValue(Command(['xacro ', LaunchConfiguration('model')]),
                                        value_type=str)
 
-    robot_state_publisher_node = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        parameters=[{'robot_description': robot_description}]
-    )
+
 
     joint_state_publisher_gui_node = Node(
         package='joint_state_publisher_gui',
@@ -42,7 +38,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         model_arg,
-        joint_state_publisher_gui_node,
-        robot_state_publisher_node,
+        # joint_state_publisher_gui_node,
+        # robot_state_publisher_node,
         rviz_node
     ])

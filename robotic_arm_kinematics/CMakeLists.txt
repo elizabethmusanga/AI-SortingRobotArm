@@ -7,19 +7,9 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(trajectory_msgs REQUIRED)
-find_package(builtin_interfaces REQUIRED)
-
-add_executable(kinematics_node src/kinematics_node.cpp)
-ament_target_dependencies(kinematics_node rclcpp trajectory_msgs builtin_interfaces)
-
-
-install(
-  TARGETS
-  kinematics_node
-  DESTINATION lib/${PROJECT_NAME}
-)
+# uncomment the following section in order to fill in
+# further dependencies manually.
+# find_package(<dependency> REQUIRED)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
