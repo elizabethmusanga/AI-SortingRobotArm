@@ -47,7 +47,8 @@ def generate_launch_description():
     spawner_node = Node(
         package = "gazebo_ros",
         executable = "spawn_entity.py",
-        arguments = ["-entity", "arduinobot", "-topic", "robot_description"],
+        arguments = ["-entity", "robotic_arm", "-topic", "robot_description"],
+        
     )
     
     

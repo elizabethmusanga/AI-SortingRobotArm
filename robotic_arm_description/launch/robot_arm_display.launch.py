@@ -22,11 +22,20 @@ def generate_launch_description():
                                        value_type=str)
 
 
+  
 
     joint_state_publisher_gui_node = Node(
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui'
     )
+
+    # Robot state publisher node
+    robot_state_publisher = Node(
+        package = "robot_state_publisher",
+        executable = "robot_state_publisher",
+        parameters =[{"robot_description": robot_description}]
+    )
+    
 
     rviz_node = Node(
         package='rviz2',
@@ -38,7 +47,6 @@ def generate_launch_description():
 
     return LaunchDescription([
         model_arg,
-        # joint_state_publisher_gui_node,
-        # robot_state_publisher_node,
+        robot_state_publisher,
         rviz_node
     ])

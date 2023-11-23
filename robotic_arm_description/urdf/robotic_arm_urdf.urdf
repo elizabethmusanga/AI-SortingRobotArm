@@ -386,6 +386,8 @@
       </geometry>
     </collision>
   </link>
+
+
   <link name="gripper_base">
     <inertial>
       <origin rpy="0 0 0" xyz="0.016989765812987632 -0.030975366550403616 0.004301084726513138"/>
@@ -395,17 +397,26 @@
     <visual>
       <origin rpy="0 0 0" xyz="-0.00285 0.141419 -0.281562"/>
       <geometry>
-        <mesh filename="package://robotic_arm_description/meshes/gripper_base.stl" scale="0.001 0.001 0.001"/>
+        
+        <box size="0.08 0.01 0.01"/>
+        <!-- <mesh filename="package://robotic_arm_description/meshes/gripper_base.stl" scale="0.001 0.001 0.001"/> -->
       </geometry>
-      <material name="pa_12_nylon_pa_603cf_with_eos_p_3d_printers"/>
+      <material name="led_red"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.00285 0.141419 -0.281562"/>
       <geometry>
-        <mesh filename="package://robotic_arm_description/meshes/gripper_base.stl" scale="0.001 0.001 0.001"/>
+
+        <box size="0.08 0.01 0.01"/>
+        <!-- <mesh filename="package://robotic_arm_description/meshes/gripper_base.stl" scale="0.001 0.001 0.001"/> -->
       </geometry>
     </collision>
   </link>
+
+  <link name = "end_effector">
+  </link>
+
+<!-- 
   <link name="gripper_finger_1">
     <inertial>
       <origin rpy="0 0 0" xyz="0.0025925452739234515 -0.04003700713978928 0.0020003926156425544"/>
@@ -426,6 +437,8 @@
       </geometry>
     </collision>
   </link>
+
+
   <link name="gripper_finger_2">
     <inertial>
       <origin rpy="0 0 0" xyz="-0.002592545273924804 -0.04003700713978928 0.002000392615642499"/>
@@ -445,7 +458,9 @@
         <mesh filename="package://robotic_arm_description/meshes/gripper_finger_2.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
-  </link>
+  </link> -->
+
+
   <!-- Joints -->
   <joint name="virtual_joint" type="fixed">
     <parent link="world"/>
@@ -504,7 +519,16 @@
     <axis xyz="1.0 -0.0 0.0"/>
     <limit effort="100" lower="-1.570796" upper="1.570796" velocity="100"/>
   </joint>
-  <joint name="right_gripper_joint" type="revolute">
+
+  <joint name = "end_effector_link" type="fixed">
+    <origin rpy="0 0 0" xyz=" 0 -0.08 0 "/>
+    <parent link="gripper_base"/>
+    <child link="end_effector"/>
+  </joint>
+  
+
+
+  <!-- <joint name="right_gripper_joint" type="revolute">
     <origin rpy="0 0 0" xyz="0.0259 -0.038 0.014"/>
     <parent link="gripper_base"/>
     <child link="gripper_finger_1"/>
@@ -519,5 +543,6 @@
     <dynamics damping="10.0" friction="2.0"/>
     <limit effort="100" lower="-1.047198" upper="0.0" velocity="100"/>
     <mimic joint="right_gripper_joint" multiplier="-1"/>
-  </joint>
+  </joint> -->
+
 </robot>
