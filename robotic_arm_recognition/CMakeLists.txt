@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(robotic_arm_msgs)
+project(robotic_arm_recognition)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -17,16 +17,9 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(std_msgs REQUIRED)
-find_package(rosidl_default_generators REQUIRED)
-
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "msg/JointAngles.msg"
-  "msg/ObjectInference.msg"
-  "msg/Yolov8Inference.msg"
-  DEPENDENCIES std_msgs
-)
-ament_export_dependencies(rosidl_default_runtime)
+# uncomment the following section in order to fill in
+# further dependencies manually.
+# find_package(<dependency> REQUIRED)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -38,5 +31,21 @@ if(BUILD_TESTING)
   #set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+install(
+  DIRECTORY
+    ${PROJECT_NAME}
+    launch
+  DESTINATION
+    share/${PROJECT_NAME}/
+)
+
+install(
+  PROGRAMS
+  ${PROJECT_NAME}/yolov8_ros2_publisher.py
+  ${PROJECT_NAME}/yolov8_ros2_subscriber.py
+  launch/robotic_arm_recognition_model.launch.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 ament_package()

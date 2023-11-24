@@ -40,17 +40,18 @@ def generate_launch_description():
             launch_arguments={"sim_mode": "True"}.items()
         )
     
-    # remote_interface = IncludeLaunchDescription(
+    # recognition_model = IncludeLaunchDescription(
     #         os.path.join(
-    #             get_package_share_directory("robotic_arm_remote"),
+    #             get_package_share_directory("robotic_arm_recognition"),
     #             "launch",
-    #             "remote_interface.launch.py"
+    #             "robotic_arm_recognition_model.launch.py"
     #         ),
     #     )
     
     return LaunchDescription([
         rviz,
         gazebo,
+        #recognition_model,
         controllers,
 
         #moveit,
