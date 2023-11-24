@@ -14,8 +14,11 @@
 <!-- Include ros2_control plugin-->
 <xacro:include filename="$(find robotic_arm_description)/urdf/robotic_arm_ros2_control.xacro"/>
 
+<!-- Include camera plugins -->
+<xacro:include filename="$(find robotic_arm_description)/urdf/robotic_arm_camera.xacro"/>
+
 <!-- Properties -->
-<xacro:property name="PI" value="1.570796"/>
+<xacro:property name="PI" value="3.147"/>
 
 <!-- Links -->
 <link name = "world"/>
@@ -148,7 +151,6 @@
 
 <link name="camera_link_frame">
 </link>
-
 
 <link name="base">
   <inertial>
@@ -342,9 +344,10 @@
 </joint>
 
 <joint name="camera_link_frame_joint" type="fixed">
-  <origin xyz="0.01 0.0 0.0" rpy="0 0 0"/>
+  <origin xyz="0.0 0.0 0.0" rpy="3.14 1.57 0"/>
   <parent link="camera_link"/>
   <child link="camera_link_frame"/>
+ 
   
 </joint>  
 

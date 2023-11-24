@@ -40,18 +40,18 @@ def generate_launch_description():
             launch_arguments={"sim_mode": "True"}.items()
         )
     
-    # recognition_model = IncludeLaunchDescription(
-    #         os.path.join(
-    #             get_package_share_directory("robotic_arm_recognition"),
-    #             "launch",
-    #             "robotic_arm_recognition_model.launch.py"
-    #         ),
-    #     )
+    recognition_model = IncludeLaunchDescription(
+            os.path.join(
+                get_package_share_directory("robotic_arm_recognition"),
+                "launch",
+                "robotic_arm_recognition_model.launch.py"
+            ),
+        )
     
     return LaunchDescription([
         rviz,
         gazebo,
-        #recognition_model,
+        recognition_model,
         controllers,
 
         #moveit,

@@ -12,7 +12,7 @@ from robotic_arm_msgs.msg import Yolov8Inference
 bridge = CvBridge()
 
 # Constants for the picking height of the robotic arm
-PICKING_HEIGHT = 0.05
+PICKING_HEIGHT = 50
 
 class Camera_subscriber(Node):
 
@@ -47,8 +47,8 @@ class Camera_subscriber(Node):
                 self.object_inference = ObjectInference()
                 b = box.xyxy[0].to('cpu').detach().numpy().copy()  # get box coordinates in (top, left, bottom, right) format
                 c = box.cls
-                x_center = (b[0] + b[2]) / 2
-                y_center = (b[1] + b[3]) / 2
+                x_center = int((b[0] + b[2]) / 2)
+                y_center = int((b[1] + b[3]) / 2)
                 self.object_inference.class_name = self.model.names[int(c)]
                 self.object_inference.x_coord = x_center
                 self.object_inference.y_coord = y_center
