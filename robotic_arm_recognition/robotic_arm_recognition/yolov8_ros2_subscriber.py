@@ -46,12 +46,12 @@ class Yolo_subscriber(Node):
     def yolo_callback(self, data):
         global img
         for r in data.yolov8_inference:
-        
+    
             class_name = r.class_name
-            x_ccord = r.x_coord
+            x_coord = r.x_coord
             y_coord = r.y_coord
             z_coord = r.z_coord
-            yolo_subscriber.get_logger().info(f"{self.cnt} {class_name} : {x_ccord}, {y_coord}, {z_coord}")
+            yolo_subscriber.get_logger().info(f"{self.cnt} {class_name} : {x_coord}, {y_coord}, {z_coord}")
             self.cnt += 1
 
         self.cnt = 0

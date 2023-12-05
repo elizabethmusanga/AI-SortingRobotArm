@@ -95,7 +95,7 @@ CallbackReturn RoboticArmHWInterface::on_activate(const rclcpp_lifecycle::State 
   try
   {
     arduino_port.Open(port_);
-    arduino_port.SetBaudRate(LibSerial::BaudRate::BAUD_115200);
+    arduino_port.SetBaudRate(LibSerial::BaudRate::BAUD_9600);
   }
   catch (...)
   {
@@ -158,24 +158,25 @@ hardware_interface::return_type RoboticArmHWInterface::write(const rclcpp::Time 
   msg.append("a");    //   base_waist_joint angle
   msg.append(std::to_string(base_waist_joint));
   msg.append(",");
-  int waist_link1_joint = 180 - static_cast<int>(((position_commands.at(1) + (M_PI / 2)) * 180) / M_PI);
+  int waist_link1_joint = 90 - static_cast<int>(((position_commands.at(1) + (M_PI / 2)) * 180) / M_PI);
   msg.append("b");   //   waist_link1_joint angle
   msg.append(std::to_string(waist_link1_joint));
   msg.append(",");
-  int link1_link2_joint = static_cast<int>(((position_commands.at(2) + (M_PI / 2)) * 180) / M_PI);
+  int link1_link2_joint = 90 + static_cast<int>(((position_commands.at(2) + (M_PI / 2)) * 180) / M_PI);
   msg.append("c");  //   link1_link2_joint angle
   msg.append(std::to_string(link1_link2_joint));
   msg.append(",");
 
-  int link2_gripper_base_joint = static_cast<int>((position_commands.at(3) + (M_PI /2)) * 180 / M_PI);
+  int link2_gripper_base_joint = 90 - static_cast<int>((position_commands.at(3) + (M_PI /2)) * 180 / M_PI);
   msg.append("d");  // link2_gripper_base_joint angle
   msg.append(std::to_string(link1_link2_joint));
   msg.append(",");
 
-  int gripper = static_cast<int>(((-position_commands.at(4)) * 180) / (M_PI / 2));
+  int gripper = static_cast<int>(((position_commands.at(4)) * 180) / (M_PI / 2));
   msg.append("e");      //   gripper value
   msg.append(std::to_string(gripper));
   msg.append(",");
+  msg.append("z");      //   end of message
 
   try
   {

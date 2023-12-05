@@ -7,6 +7,7 @@ urdf_file="/home/newton/ROS2/ai_based_sorting_robotic_arm/src/AI-SortingRobotArm
 
 robotic_arm = ikpy.chain.Chain.from_urdf_file(urdf_file, active_links_mask= [False, False, True, True, True, True, False])
 T=robotic_arm.forward_kinematics([0]* 7)
+print(f"Forward Kinematics Solution :\n {T}")
 print("++++++++++++++++++++++++++++++++++++++++++++++++\n")
 
 count=0

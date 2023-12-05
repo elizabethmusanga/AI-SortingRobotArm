@@ -24,8 +24,10 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/JointAngles.msg"
   "msg/ObjectInference.msg"
   "msg/Yolov8Inference.msg"
+  "srv/IKSolver.srv"
   DEPENDENCIES std_msgs
 )
+
 ament_export_dependencies(rosidl_default_runtime)
 
 if(BUILD_TESTING)

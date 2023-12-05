@@ -22,17 +22,9 @@ def generate_launch_description():
             ),
             launch_arguments={"sim_mode": "False"}.items()
         )
-    
-    # remote_interface = IncludeLaunchDescription(
-    #         os.path.join(
-    #             get_package_share_directory("robotic_arm_remote"),
-    #             "launch",
-    #             "remote_interface.launch.py"
-    #         ),
-    #     )
+
     
     return LaunchDescription([
         controllers,
         rviz,
-        # remote_interface,
     ])

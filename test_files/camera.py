@@ -46,8 +46,7 @@ def resize_frame(frame, target_width=1366, target_height=768):
 # Function to recognize object and position it with reference to the ArUco marker
 def recognize_and_position_object():
     cap = cv2.VideoCapture(0)
-    address = "http://192.168.137.142:8080//video"
-    cap.open(address)
+   
 
     # Set the window size to fit your screen resolution
     window_width = 1366

@@ -8,7 +8,7 @@
       <visualize>true</visualize>
       <update_rate>10.0</update_rate>
       <camera name="rgb_cam">
-          <horizontal_fov>1.396264</horizontal_fov>
+          <horizontal_fov>1.234</horizontal_fov>
           <image>
            <width>640</width>
            <height>480</height>
@@ -16,7 +16,7 @@
           </image>
           <clip>
               <near>0.05</near>
-              <far>8.0</far>
+              <far>1.0</far>
           </clip>
       </camera>
       <plugin name="camera_controller" filename="libgazebo_ros_camera.so">

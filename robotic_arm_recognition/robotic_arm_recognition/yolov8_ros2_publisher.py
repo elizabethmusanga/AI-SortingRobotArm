@@ -38,8 +38,8 @@ class Camera_subscriber(Node):
         img = bridge.imgmsg_to_cv2(data, "bgr8")
         results = self.model(img)
 
-        self.yolov8_inference.header.frame_id = "inference"
-        self.yolov8_inference.header.stamp = camera_subscriber.get_clock().now().to_msg()
+        # self.yolov8_inference.header.frame_id = "inference"
+        # self.yolov8_inference.header.stamp = camera_subscriber.get_clock().now().to_msg()
 
         for r in results:
             boxes = r.boxes
@@ -47,22 +47,26 @@ class Camera_subscriber(Node):
                 self.object_inference = ObjectInference()
                 b = box.xyxy[0].to('cpu').detach().numpy().copy()  # get box coordinates in (top, left, bottom, right) format
                 c = box.cls
-                x_center = int((b[0] + b[2]) / 2)
-                y_center = int((b[1] + b[3]) / 2)
+                x_center: int = int(((b[0] + b[2]) / 2))
+                y_center: int = int(((b[1] + b[3]) / 2))
                 self.object_inference.class_name = self.model.names[int(c)]
                 self.object_inference.x_coord = x_center
                 self.object_inference.y_coord = y_center
                 self.object_inference.z_coord = PICKING_HEIGHT
-                self.yolov8_inference.yolov8_inference.append(self.object_inference)
 
-            #camera_subscriber.get_logger().info(f"{self.yolov8_inference}")
+                if self.object_inference.class_name == "Cylinder" or self.object_inference.class_name == "Cube" or self.object_inference.class_name == "Hexagon":
+                    self.yolov8_inference.class_names.append(self.object_inference.class_name)
+                    self.yolov8_inference.detected_obj_positions.append(str(self.object_inference.x_coord))
+                    self.yolov8_inference.detected_obj_positions.append(str(self.object_inference.y_coord))
+                    self.yolov8_inference.detected_obj_positions.append(str(self.object_inference.z_coord))
 
         annotated_frame = results[0].plot()
         img_msg = bridge.cv2_to_imgmsg(annotated_frame)  
 
         self.img_pub.publish(img_msg)
         self.yolov8_pub.publish(self.yolov8_inference)
-        self.yolov8_inference.yolov8_inference.clear()
+        self.yolov8_inference.class_names.clear()
+        self.yolov8_inference.detected_obj_positions.clear()
 
 if __name__ == '__main__':
     rclpy.init(args=None)

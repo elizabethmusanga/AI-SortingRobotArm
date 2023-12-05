@@ -521,7 +521,7 @@
   </joint>
 
   <joint name = "end_effector_link" type="fixed">
-    <origin rpy="0 0 0" xyz=" 0 -0.08 0 "/>
+    <origin rpy="0 0 0" xyz=" 0.01 -0.08 0.01 "/>
     <parent link="gripper_base"/>
     <child link="end_effector"/>
   </joint>

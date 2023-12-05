@@ -12,7 +12,7 @@ from ament_index_python.packages import get_package_share_directory
 class Trajectory_publisher(Node):
     def __init__(self):
         # trajectory publisher node
-        super().__init__('trajectory_publisher_node')
+        super().__init__('ik_node')
         # Topic to publish to
         publish_topic = "/robotic_arm_joint_trajectory_controller/joint_trajectory"
         # Creating the trajectory publisher
@@ -25,7 +25,8 @@ class Trajectory_publisher(Node):
         self.joints = [ "base_waist_joint",
                         "waist_link1_joint",
                         "link1_link2_joint",
-                        "link2_gripper_base_joint"
+                        "link2_gripper_base_joint",
+                        "right_gripper_joint"
                         ]
 
 
@@ -61,7 +62,9 @@ class Trajectory_publisher(Node):
     def inverse_kinematics_solution(self,x,y,z):
         angles=self.robotic_arm.inverse_kinematics([x,y,z])
         angles = np.delete(angles, [0, 1, 6])
+        angles = np.append(angles, 0.0)
         self.goal_positions = list(angles) 
+       
         print("\nInverse Kinematics Solution :\n" ,self.goal_positions)
 
 

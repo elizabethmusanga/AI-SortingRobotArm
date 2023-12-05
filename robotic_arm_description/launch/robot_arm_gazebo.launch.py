@@ -8,10 +8,11 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 package_name = "robotic_arm_description"
 xacro_file = "robotic_arm.xacro"
+gz_world_file = "robotic_arm_world.world"
 
 def generate_launch_description():
     description_package = os.path.join(get_package_share_directory(package_name))
-    
+    world = os.path.join(description_package, "worlds", gz_world_file)
     model_arg = DeclareLaunchArgument(
         name = "model",
         default_value=os.path.join(description_package, "urdf", "robotic_arm.xacro"),
@@ -32,7 +33,7 @@ def generate_launch_description():
     
     # Gazebo launch
     gazebo_node = ExecuteProcess(
-    cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_factory.so'],
+    cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_factory.so', "-world", world],
     output='screen'
     )
 
