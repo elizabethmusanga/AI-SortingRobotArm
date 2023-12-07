@@ -24,6 +24,8 @@ class ImagePublisher(Node):
         self.cap = cv2.VideoCapture(0)                                   # Create a video capture object to drive the camera for image capture (camera device number)
         self.cv_bridge = CvBridge()                                      # Create an image conversion object for later converting OpenCV images to ROS image messages
 
+        self.get_logger().info('Camera Node started')                 # Output log information indicating that the image topic has been published
+
     def timer_callback(self):
         ret, frame = self.cap.read()                                     # Read each frame of the image
         
@@ -31,7 +33,6 @@ class ImagePublisher(Node):
             self.publisher_.publish(
                 self.cv_bridge.cv2_to_imgmsg(frame, 'bgr8'))             # Publish the image message
 
-        self.get_logger().info('Publishing video frame')                 # Output log information indicating that the image topic has been published
 
 def main(args=None):                                 # ROS2 node main entry point main function
     rclpy.init(args=args)                            # Initialize the ROS2 Python interface
