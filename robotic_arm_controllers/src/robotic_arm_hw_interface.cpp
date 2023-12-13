@@ -49,6 +49,7 @@ CallbackReturn RoboticArmHWInterface::on_init(const hardware_interface::Hardware
   position_states.reserve(info_.joints.size());
   prev_position_commands.reserve(info_.joints.size());
 
+
   return CallbackReturn::SUCCESS;
 }
 
@@ -154,20 +155,20 @@ hardware_interface::return_type RoboticArmHWInterface::write(const rclcpp::Time 
 
 
   std::string msg;
-  int base_waist_joint = static_cast<int>(((position_commands.at(0) + (M_PI / 2)) * 180) / M_PI);
+  int base_waist_joint = static_cast<int>((90 + (position_commands.at(0) * 180) / M_PI));
   msg.append("a");    //   base_waist_joint angle
   msg.append(std::to_string(base_waist_joint));
   msg.append(",");
-  int waist_link1_joint = 90 - static_cast<int>(((position_commands.at(1) + (M_PI / 2)) * 180) / M_PI);
+  int waist_link1_joint = static_cast<int>((90 - (position_commands.at(1) * 180) / M_PI));
   msg.append("b");   //   waist_link1_joint angle
   msg.append(std::to_string(waist_link1_joint));
   msg.append(",");
-  int link1_link2_joint = 90 + static_cast<int>(((position_commands.at(2) + (M_PI / 2)) * 180) / M_PI);
+  int link1_link2_joint = static_cast<int>((90 + (position_commands.at(2) * 180) / M_PI));
   msg.append("c");  //   link1_link2_joint angle
   msg.append(std::to_string(link1_link2_joint));
   msg.append(",");
 
-  int link2_gripper_base_joint = 90 - static_cast<int>((position_commands.at(3) + (M_PI /2)) * 180 / M_PI);
+  int link2_gripper_base_joint = static_cast<int>((90 - (position_commands.at(3) * 180) / M_PI));
   msg.append("d");  // link2_gripper_base_joint angle
   msg.append(std::to_string(link1_link2_joint));
   msg.append(",");
@@ -176,12 +177,17 @@ hardware_interface::return_type RoboticArmHWInterface::write(const rclcpp::Time 
   msg.append("e");      //   gripper value
   msg.append(std::to_string(gripper));
   msg.append(",");
-  msg.append("z");      //   end of message
+  msg.append("\n");      //   end of message
 
   try
   {
+    if(i = 0)
+    {
     RCLCPP_INFO_STREAM(rclcpp::get_logger("RoboticArmHWInterface"), "Sending new command " << msg);
     arduino_port.Write(msg);
+    i = 1;
+    }
+  
   }
   catch (...)
   {

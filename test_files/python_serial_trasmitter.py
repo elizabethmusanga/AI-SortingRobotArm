@@ -23,5 +23,7 @@ def construct_2d_list(list1, list2):
     return list_of_lists
 
 construct_2d_list = construct_2d_list(list1, list2)
-print("Construct 2d list: ", construct_2d_list)
-
+print("Construct 2d list original: ", construct_2d_list)
+item = construct_2d_list[1]
+construct_2d_list.pop(construct_2d_list.index(item))
+print("Construct 2d list modified : ", construct_2d_list)

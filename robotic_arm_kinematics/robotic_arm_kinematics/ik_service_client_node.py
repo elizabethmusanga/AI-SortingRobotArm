@@ -5,7 +5,15 @@ from rclpy.node import Node
 from numpy import pi
 from robotic_arm_msgs.srv import IKSolver
 from robotic_arm_msgs.msg import Yolov8Inference
+import time
+from functools import partial
 import keyboard
+from rclpy.timer import Timer
+
+DELAY = 10
+
+# Object pos, for testing, tobe removed
+object_pos = [100, -150, 80]
 
 class IKClientNode(Node):
     def __init__(self):
@@ -14,19 +22,19 @@ class IKClientNode(Node):
         self.send_command: bool = False
  
         # List to store previous detected objects and their positions in the scene
-        self.previous_positions = [" ", " ", " ", " "]
+        self.previous_positions = []
 
 
         # Z Position of the gripper when placing an object
         self.placing_coord_z = 200
 
         # Robot's home position
-        self.home_pos = [13, -222, 292]
+        self.home_pos = [13, -220, 200]
 
         # List to store positions of the cylinders, cubes, and hexagons containers respectively
-        self.cylinders_container_pos = [-240, -70, 55]
-        self.cubes_container_pos = [-210, -295, 55]
-        self.hexagons_container_pos = [-130, -70, 55]
+        self.cylinders_container_pos = [-200, -50, 200]
+        self.cubes_container_pos = [ -150, -200, 200]
+        self.hexagons_container_pos = [ -100, -50, 200]
 
         # Gripper States and their corresponding angles
         self.GRIPPER_OPEN = pi/3
@@ -42,12 +50,21 @@ class IKClientNode(Node):
             '/Yolov8_Inference',
             self.object_inference_callback,
             10)
+
         
+        self.timer = self.create_timer(5.0, self.timer_callback)
+        
+
+    def timer_callback(self):
+        self.pick_and_place_object()
+        self.get_logger().info("Ready to kill timer")
+        self.timer.cancel()
+
 
     # Service client setup
     def service_client_setup(self, x, y, z, gripper_state):
+        # Service client to the IK solver service
         self.client_ = self.create_client(IKSolver, 'ik_server')
-
         while not self.client_.wait_for_service(timeout_sec=1.0):
             self.get_logger().warn('service not available, waiting again...')
 
@@ -58,7 +75,7 @@ class IKClientNode(Node):
         self.request.gripper_state = gripper_state
 
         self.future_ = self.client_.call_async(self.request)
-        self.future_ = self.future_.add_done_callback(self.response_callback)
+        self.future_ = self.future_.add_done_callback(partial(self.response_callback))
 
 
     # Callback function for the subscriber
@@ -76,7 +93,9 @@ class IKClientNode(Node):
 
         # If the object positions are the same as the previous positions, do nothing 
         if not self.compare_lists(objects_and_positions, self.previous_positions):
-            object_to_pick = self.first_object_to_pick_determiner(objects_and_positions)
+            self.previous_positions = objects_and_positions
+
+            object_to_pick = self.first_object_to_pick_determiner(self.previous_positions)
             self.get_logger().info("Object positions changed")
             class_name = object_to_pick[0]
             x = int(object_to_pick[1])
@@ -84,6 +103,8 @@ class IKClientNode(Node):
             z = int(object_to_pick[3])
 
             self.start_position = [x, y, z]
+
+            # Determine the end position based on the class name
             if class_name == "Cylinder":
                 self.end_position = self.cylinders_container_pos
             elif class_name == "Cube":
@@ -92,21 +113,14 @@ class IKClientNode(Node):
                 self.end_position = self.hexagons_container_pos
             else:
                 self.end_position = self.home_pos
+            
+            # Pick and place the object
+            # self.pick_and_place_object()
 
-            self.previous_positions = objects_and_positions
-
-            self.pick_and_place_object()
+            # Remove the object from the list
+            self.previous_positions.pop(self.previous_positions.index(object_to_pick))
         else:
             self.get_logger().info("No new objects detected")
-
-            # if keyboard.read_key() == 'k':
-            #     self.send_command = True
-
-                
-            # if self.send_command:
-            #     self.pick_and_place_object()
-
-            # self.get_logger().info(f"Received object positions: {object_positions}")
 
     # Callback function for the service client
     def response_callback(self, future):
@@ -126,18 +140,23 @@ class IKClientNode(Node):
             print("Closing gripper")
             return self.GRIPPER_CLOSE
         
-        # Function to decide what Object to pick first
-    def first_object_to_pick_determiner(self, objects_list):
-        x_closest = objects_list[0][1]
-        object_to_pick = objects_list[0]
-        # Pick object closest to the robot's base position wrt x axis
-        for object in range(len(objects_list)):
-            if objects_list[object][1] < x_closest:
-                x_closest = objects_list[object][1]
-                object_to_pick = objects_list[object]
 
-        # # Remove the object from the list
-        # objects_list.remove(object_to_pick)
+    # Function to decide what Object to pick first
+    def first_object_to_pick_determiner(self, objects_list):
+        if len(objects_list) == 0:
+            return None
+        else:
+            x_closest = objects_list[0][1]
+            object_to_pick = objects_list[0]
+            # Pick object closest to the robot's base position wrt x axis
+            for object in range(len(objects_list)):
+                if objects_list[object][1] < x_closest:
+                    x_closest = objects_list[object][1]
+                    object_to_pick = objects_list[object]
+
+            # # Remove the object from the list
+            # objects_list.remove(object_to_pick)
+
         return object_to_pick
             
     # Define the pick and place logic
@@ -145,28 +164,41 @@ class IKClientNode(Node):
 
         # Open gripper
         self.service_client_setup(self.home_pos[0], self.home_pos[1], self.home_pos[2], True)
+        time.sleep(DELAY)
         # Move to the object's position
-        self.service_client_setup(self.start_position[0], self.start_position[1], self.start_position[2], True)
+        self.service_client_setup(object_pos[0], object_pos[1], object_pos[2], True)
+        time.sleep(DELAY)
         # Close the gripper
-        self.service_client_setup(self.start_position[0], self.start_position[1], self.start_position[2], False)
+        self.service_client_setup(object_pos[0], object_pos[1], object_pos[2], False)
+        time.sleep(DELAY)
         # Move to the placing position
-        self.service_client_setup(self.end_position[0], self.end_position[1], self.end_position[2], False)
+        self.service_client_setup(self.cubes_container_pos[0], self.cubes_container_pos[1], self.cubes_container_pos[2], False)
+        time.sleep(DELAY)
         # Open the gripper
         self.service_client_setup(self.end_position[0], self.end_position[1], self.end_position[2], True)
+        time.sleep(DELAY)
 
-        # Return to home position
-        self.service_client_setup(self.home_pos[0], self.home_pos[1], self.home_pos[2], False)
+        # # Return to home position
+        # self.service_client_setup(self.home_pos[0], self.home_pos[1], self.home_pos[2], False)
 
         # self.send_command = False
 
     # Function to compare two lists
     def compare_lists(self, list1, list2):
-        list1 = sorted(list1)
-        list2 = sorted(list2)
-        if list1 == list2:
-            return True
-        else:
+        # List1 and list2 are lists of lists
+        # If the lists are of the same length, compare the elements
+        if len(list1) != len(list2):
             return False
+        else:
+            # If the lists are of the same length, compare the first elements of each list
+            for i in range(len(list1)):
+                if list1[i][0] != list2[i][0]:
+                    return False
+                else:
+                    continue
+                
+            return True
+            
 
     # Function to construct a list of lists from 2 lists
     def construct_2d_list(self, list1, list2):

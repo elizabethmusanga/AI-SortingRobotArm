@@ -22,6 +22,7 @@ setup(
         'console_scripts': [
             'fk_test_node = robotic_arm_custom_nodes.fk_test_node:main',
             'ik_node = robotic_arm_custom_nodes.inverse_kinematics_node:main',
+            'arduino_data = robotic_arm_custom_nodes.arduino_data:main',
         ],
     },
 )

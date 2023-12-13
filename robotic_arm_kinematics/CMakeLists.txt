@@ -28,6 +28,7 @@ include_directories(include)
 install(
   DIRECTORY
     ${PROJECT_NAME}
+    launch
   DESTINATION
     share/${PROJECT_NAME}/
 )

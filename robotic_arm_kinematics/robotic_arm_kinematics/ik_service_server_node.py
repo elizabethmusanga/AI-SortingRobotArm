@@ -5,8 +5,7 @@ import numpy as np
 import rclpy
 import ikpy.chain
 from rclpy.node import Node
-from rcl_interfaces.msg import ParameterDescriptor
-
+import serial, time
 
 from builtin_interfaces.msg import Duration
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
@@ -15,6 +14,8 @@ from sensor_msgs.msg import JointState
 from ament_index_python.packages import get_package_share_directory
 
 from robotic_arm_msgs.srv import IKSolver
+
+HOME_POSITION = [np.pi/2, np.pi/2, np.pi/2, np.pi/2, 0.0]
 
 # URDF file of the robot
 urdf_file = os.path.join(get_package_share_directory("robotic_arm_description"), "urdf", "robotic_arm_urdf.urdf")  
@@ -27,13 +28,15 @@ class IKServerNode(Node):
         self.service_ = self.create_service(IKSolver, "ik_server", self.ik_solver_callback)
         self.get_logger().info("Starting IK Server Node")
 
-        # # Topic to publish to
-        # publish_topic = "/robotic_arm_joint_trajectory_controller/joint_trajectory"
-        # # Creating the trajectory publisher
-        # self.trajectory_publisher = self.create_publisher(JointTrajectory, publish_topic, 10)
-        # self.timer_period = 1.0
+        # Topic to publish to
+        publish_topic = "/robotic_arm_joint_trajectory_controller/joint_trajectory"
+        # Creating the trajectory publisher
+        self.trajectory_publisher = self.create_publisher(JointTrajectory, publish_topic, 10)
+        self.timer_period = 1.0
+        #self.timer = self.create_timer(self.timer_period, self.timer_callback)
 
-        
+        # Goal Positions
+        self.goal_positions = HOME_POSITION
         # Joints to be controlled
         self.joints = [ "base_waist_joint",
                         "waist_link1_joint",
@@ -43,36 +46,31 @@ class IKServerNode(Node):
                         ]
         
 
-
-
-
-
-####################################################################################################################
-        self.declare_parameter("controller_name", "robotic_arm_joint_trajectory_controller")
-        self.declare_parameter("wait_sec_between_publish", 10)
-
-        # Read parameters
-        controller_name = self.get_parameter("controller_name").value
-        self.wait_sec_between_publish = self.get_parameter("wait_sec_between_publish").value
-
-
-        publish_topic = "/" + controller_name + "/" + "joint_trajectory"
-
-        self.get_logger().info(
-            f'Publishing  goals on topic "{publish_topic}"\
-              every {self.wait_sec_between_publish} s'
-        )
-
-        self.publisher_ = self.create_publisher(JointTrajectory, publish_topic, 1)
-
-####################################################################################################################
-
     # Callback function for the service
     def ik_solver_callback(self, request, response):
         self.get_logger().info(f"Received position x={request.x_coord} y={request.y_coord} z={request.z_coord}")
         response.joint_angles = self.inverse_kinematics_solution(request.x_coord/1000, request.y_coord/1000, request.z_coord/1000, request.gripper_state)
-        # Creating a timer        
-        self.timer = self.create_timer(self.wait_sec_between_publish, self.timer_callback)
+        # Creating a timer   
+        arduino_data =  "a" + str(int(90 + np.rad2deg(response.joint_angles[0]))) \
+                        + ",b" + str(int(90 - np.rad2deg(response.joint_angles[1]))) \
+                        + ",c" + str(int(90 + np.rad2deg(response.joint_angles[2]))) \
+                        + ",d" + str(int(90 - np.rad2deg(response.joint_angles[3]))) \
+                        + ",e" + str(int(np.rad2deg(response.joint_angles[4]))) + ",\n"
+
+        #arduino_data = "a90,b90,c90,d0,e60,\n"
+        #######################################################
+
+        self.get_logger().info(f"Data Sent to arduino = {arduino_data}")
+
+        trajectory_msg = JointTrajectory()
+        trajectory_msg.joint_names = self.joints
+        point = JointTrajectoryPoint()
+        point.positions = self.goal_positions
+        point.time_from_start = Duration(sec=2)
+        trajectory_msg.points.append(point)
+        self.trajectory_publisher.publish(trajectory_msg)
+        self.send_to_arduino(arduino_data)
+
         self.get_logger().info(f"IK solution: {response.joint_angles}")
         return response
 
@@ -84,8 +82,8 @@ class IKServerNode(Node):
         point.positions = self.goal_positions
         point.time_from_start = Duration(sec=2)
         trajectory_msg.points.append(point)
-        self.publisher_.publish(trajectory_msg)
-        print("\nTrajectory Sent !\n")
+        self.trajectory_publisher.publish(trajectory_msg)
+        self.get_logger().info(f"Timer Goal Positions = {self.goal_positions}")
     
     
     # Function to initialize urdf
@@ -115,51 +113,18 @@ class IKServerNode(Node):
         print("\nInverse Kinematics Solution :\n" ,self.goal_positions)
         return self.goal_positions
     
+    # Function to send data to Arduino
+    def send_to_arduino(self, data: str):
+        try:
+            # Serial port setup
+            self.ser = serial.Serial("/dev/ttyUSB0", 9600, timeout=1)
+            self.ser.flush()
+            self.ser.write(data.encode('utf-8'))
+            self.get_logger().info("Sent to Arduino: " + data)
 
-####################################################################################################################
-####################################################################################################################
-    # def timer_callback(self):
 
-    #     if self.starting_point_ok:
-
-    #         self.get_logger().info(f"Sending goal {self.goals[self.i]}.")
-
-    #         traj = JointTrajectory()
-    #         traj.joint_names = self.joints
-    #         traj.points.append(self.goals[self.i])
-    #         self.publisher_.publish(traj)
-
-    #         self.i += 1
-    #         self.i %= len(self.goals)
-
-    #     elif self.check_starting_point and not self.joint_state_msg_received:
-    #         self.get_logger().warn(
-    #             'Start configuration could not be checked! Check "joint_state" topic!'
-    #         )
-    #     else:
-    #         self.get_logger().warn("Start configuration is not within configured limits!")
-    
-    def joint_state_callback(self, msg):
-
-        if not self.joint_state_msg_received:
-
-            # check start state
-            limit_exceeded = [False] * len(msg.name)
-            for idx, enum in enumerate(msg.name):
-                if (msg.position[idx] < self.starting_point[enum][0]) or (
-                    msg.position[idx] > self.starting_point[enum][1]
-                ):
-                    self.get_logger().warn(f"Starting point limits exceeded for joint {enum} !")
-                    limit_exceeded[idx] = True
-
-            if any(limit_exceeded):
-                self.starting_point_ok = False
-            else:
-                self.starting_point_ok = True
-
-            self.joint_state_msg_received = True
-        else:
-            return
+        except serial.SerialException as e:
+            self.get_logger().error(f"Could not send data due to this error: {e}")
 
 
 # Main function

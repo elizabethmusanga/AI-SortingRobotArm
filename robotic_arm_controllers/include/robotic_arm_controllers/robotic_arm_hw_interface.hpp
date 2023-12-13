@@ -18,6 +18,7 @@ namespace robotic_arm_controllers
     {
         public:
             RoboticArmHWInterface();
+            int i = 0;
 
             // Destructor
             virtual ~RoboticArmHWInterface();

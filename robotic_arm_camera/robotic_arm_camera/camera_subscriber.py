@@ -18,11 +18,11 @@ from robotic_arm_msgs.msg import Yolov8Inference    # Custom message type
 PICKING_HEIGHT = 50
 
 # Define the x-axis drift of the robotic arm
-ARUCO_MARKER_SIZE_MM = 27
-X_DRIFT = 300 - int(ARUCO_MARKER_SIZE_MM / 2)
+ARUCO_MARKER_SIZE_MM = 34
+Y_DRIFT = 300 - int(ARUCO_MARKER_SIZE_MM / 2)
 
 """
-Create a subscriber node 
+Create a subscriber node c
 """
 
 class ImageSubscriber(Node):
@@ -65,13 +65,17 @@ class ImageSubscriber(Node):
                     c = box.cls
 
                     # x_origin, y_origin, aruco
-                    x_origin ,y_origin = reference_center[0] * pixel_to_mm_ratio, reference_center[1] * pixel_to_mm_ratio
+                    x_origin = reference_center[1] * pixel_to_mm_ratio
+                    y_origin = reference_center[0] * pixel_to_mm_ratio
 
-                    x_origin, y_origin = self.transform_aruco_center_to_robot_base(X_DRIFT, x_origin, y_origin)
+                    # x_origin, y_origin = self.transform_aruco_center_to_robot_base(Y_DRIFT, x_origin, y_origin)
 
                     # Calculate the centres of the bounding box
-                    x_center, y_center = (x1 + x2) / 2, (y1 + y2) / 2
-                    x_center, y_center = x_center * pixel_to_mm_ratio, y_center * pixel_to_mm_ratio
+                    x_center = (x1 + x2) / 2
+                    y_center = (y1 + y2) / 2
+
+                    x_center = x_center * pixel_to_mm_ratio
+                    y_center = y_center * pixel_to_mm_ratio
 
                     x_pos = int(x_center - x_origin)
                     y_pos = int(y_center - y_origin)
@@ -142,9 +146,9 @@ class ImageSubscriber(Node):
         return reference_center, pixel_to_mm_ratio, centers
     
     # Transform the ArUco marker center to the robotic arm base (reference point)
-    def transform_aruco_center_to_robot_base(self, x_drift, aruco_center_x, aruco_center_y):
-        x_origin = (x_drift - aruco_center_x)
-        y_origin = (aruco_center_y)
+    def transform_aruco_center_to_robot_base(self, y_drift, aruco_center_x, aruco_center_y):
+        y_origin = (y_drift - aruco_center_y)
+        x_origin = (aruco_center_x)
         return x_origin, y_origin
     
 

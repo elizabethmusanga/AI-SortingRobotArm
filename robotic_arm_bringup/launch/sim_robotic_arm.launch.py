@@ -32,17 +32,26 @@ def generate_launch_description():
     )
     
     
-    recognition_model = IncludeLaunchDescription(
+    camera = IncludeLaunchDescription(
             os.path.join(
-                get_package_share_directory("robotic_arm_recognition"),
+                get_package_share_directory("robotic_arm_camera"),
                 "launch",
-                "robotic_arm_recognition_model.launch.py"
+                "robot_arm_camera.launch.py"
+            ),
+        )
+    
+    kinematics = IncludeLaunchDescription(
+            os.path.join(
+                get_package_share_directory("robotic_arm_kinematics"),
+                "launch",
+                "robotic_arm_kinematics.launch.py"
             ),
         )
     
     return LaunchDescription([
         rviz,
         gazebo,
-        recognition_model,
+        camera,
         controllers,
+        kinematics
     ])

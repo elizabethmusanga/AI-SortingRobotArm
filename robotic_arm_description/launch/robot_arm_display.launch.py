@@ -12,11 +12,19 @@ from launch_ros.parameter_descriptions import ParameterValue
 def generate_launch_description():
     robotic_arm_description_dir = get_package_share_directory('robotic_arm_description')
 
+    DeclareLaunchArgument('rviz_config', 
+                            default_value=os.path.join(
+                                            robotic_arm_description_dir, 'rviz_configs', 'rviz_sim.rviz'
+                                            ),
+                            description='Absolute path to robot rviz config file')
+
     model_arg = DeclareLaunchArgument(name='model', 
                                       default_value=os.path.join(
                                                     robotic_arm_description_dir, 'urdf', 'robotic_arm.xacro'
                                                     ),
                                       description='Absolute path to robot urdf file')
+    
+
 
     robot_description = ParameterValue(Command(['xacro ', LaunchConfiguration('model')]),
                                        value_type=str)
@@ -42,7 +50,8 @@ def generate_launch_description():
         executable='rviz2',
         name='rviz2',
         output='screen',
-        arguments=['-d', os.path.join(robotic_arm_description_dir, 'rviz', 'display.rviz')],
+        arguments=['-d', os.path.join(robotic_arm_description_dir, 'rviz_configs', 'rviz_sim.rviz')],
+
     )
 
     return LaunchDescription([
