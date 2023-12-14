@@ -10,7 +10,8 @@ from functools import partial
 import keyboard
 from rclpy.timer import Timer
 
-DELAY = 10
+DELAY = 5
+TRAJECTORY_HEIGHT = 120
 
 # Object pos, for testing, tobe removed
 object_pos = [100, -150, 80]
@@ -29,16 +30,16 @@ class IKClientNode(Node):
         self.placing_coord_z = 200
 
         # Robot's home position
-        self.home_pos = [13, -220, 200]
+        self.home_pos = [0, -220, 270]
 
         # List to store positions of the cylinders, cubes, and hexagons containers respectively
-        self.cylinders_container_pos = [-200, -50, 200]
-        self.cubes_container_pos = [ -150, -200, 200]
-        self.hexagons_container_pos = [ -100, -50, 200]
+        self.cylinders_container_pos = [-250, 0, self.placing_coord_z]
+        self.cubes_container_pos = [ -150, -230, self.placing_coord_z]
+        self.hexagons_container_pos = [ -150, 0, self.placing_coord_z]
 
         # Gripper States and their corresponding angles
         self.GRIPPER_OPEN = pi/3
-        self.GRIPPER_CLOSE = 0
+        self.GRIPPER_CLOSE = pi/6
 
         # List to store the variable of where the object picked and is to be placed
         self.start_position = self.home_pos
@@ -171,11 +172,17 @@ class IKClientNode(Node):
         # Close the gripper
         self.service_client_setup(object_pos[0], object_pos[1], object_pos[2], False)
         time.sleep(DELAY)
+        # Move to trajectory height to avoid collisiom
+        self.service_client_setup(object_pos[0], object_pos[1], TRAJECTORY_HEIGHT, False)
+        time.sleep(DELAY)
         # Move to the placing position
         self.service_client_setup(self.cubes_container_pos[0], self.cubes_container_pos[1], self.cubes_container_pos[2], False)
         time.sleep(DELAY)
+        # Dropping the object
+        self.service_client_setup(self.cubes_container_pos[0], self.cubes_container_pos[1], self.cubes_container_pos[2], True)
+        time.sleep(DELAY)
         # Open the gripper
-        self.service_client_setup(self.end_position[0], self.end_position[1], self.end_position[2], True)
+        self.service_client_setup(self.end_position[0], self.end_position[1], self.end_position[2], False)
         time.sleep(DELAY)
 
         # # Return to home position

@@ -5,6 +5,7 @@ from launch.actions import DeclareLaunchArgument, SetEnvironmentVariable, Includ
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory, get_package_prefix
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
 
 package_name = "robotic_arm_description"
 xacro_file = "robotic_arm.xacro"
@@ -51,6 +52,18 @@ def generate_launch_description():
         arguments = ["-entity", "robotic_arm", "-topic", "robot_description"],
         
     )
+
+    #RVIZ pnode.
+      # Get the file path of the configuration file to load
+    rviz_config_file = os.path.join(get_package_share_directory(package_name), "rviz_configs", "rviz_sim.rviz")
+
+    rviz_node = Node(
+            package='rviz2',
+            executable='rviz2',
+            name='rviz2',
+            arguments=['-d', rviz_config_file],
+            output='screen'
+        )
     
     
     return LaunchDescription([
@@ -59,4 +72,5 @@ def generate_launch_description():
         robot_state_publisher,
         gazebo_node,
         spawner_node,
+        rviz_node,
     ])

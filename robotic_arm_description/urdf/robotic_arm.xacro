@@ -17,11 +17,15 @@
 <!-- Include camera plugins -->
 <xacro:include filename="$(find robotic_arm_description)/urdf/robotic_arm_camera.xacro"/>
 
+<!-- Links -->
+<link name = "world"/>
+
+<!--include aruco marke-->
+<xacro:include filename="$(find robotic_arm_description)/urdf/aruco_marker.xacro"/>
+
 <!-- Properties -->
 <xacro:property name="PI" value="3.147"/>
 
-<!-- Links -->
-<link name = "world"/>
 
 <link name="base_link">
   <inertial>

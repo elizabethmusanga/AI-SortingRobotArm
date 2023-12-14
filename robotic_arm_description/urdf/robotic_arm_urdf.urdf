@@ -398,7 +398,7 @@
       <origin rpy="0 0 0" xyz="-0.00285 0.141419 -0.281562"/>
       <geometry>
         
-        <box size="0.08 0.01 0.01"/>
+        <box size="0.01 0.1 0.01"/>
         <!-- <mesh filename="package://robotic_arm_description/meshes/gripper_base.stl" scale="0.001 0.001 0.001"/> -->
       </geometry>
       <material name="led_red"/>
@@ -407,7 +407,7 @@
       <origin rpy="0 0 0" xyz="-0.00285 0.141419 -0.281562"/>
       <geometry>
 
-        <box size="0.08 0.01 0.01"/>
+        <box size="0.01 0.1 0.01"/>
         <!-- <mesh filename="package://robotic_arm_description/meshes/gripper_base.stl" scale="0.001 0.001 0.001"/> -->
       </geometry>
     </collision>
@@ -521,7 +521,7 @@
   </joint>
 
   <joint name = "end_effector_link" type="fixed">
-    <origin rpy="0 0 0" xyz=" 0.01 -0.08 0.01 "/>
+    <origin rpy="0 0 0" xyz=" 0.01 -0.1 0.01 "/>
     <parent link="gripper_base"/>
     <child link="end_effector"/>
   </joint>
