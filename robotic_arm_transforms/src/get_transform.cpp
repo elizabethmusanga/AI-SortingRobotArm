@@ -25,13 +25,10 @@ public:
     // Declare and acquire `target_frame` parameter
     target_frame_ = this->declare_parameter<std::string>("target_frame", "turtle1");
 
-    tf_buffer_ =
-      std::make_unique<tf2_ros::Buffer>(this->get_clock());
-    tf_listener_ =
-      std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
-
+    tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
+    tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
     // Create a client to spawn a turtle
-    //spawner_ = this->create_client<turtlesim::srv::Spawn>("spawn");
+    
 
     // Create turtle2 velocity publisher
     publisher_ = this->create_publisher<geometry_msgs::msg::Point>("topic", 1);
@@ -39,8 +36,6 @@ public:
     subscription_ = this->create_subscription<robotic_arm_msgs::msg::Yolov8Inference>("/Yolov8_Inference", 10, std::bind(&FrameListener::on_timer, this, _1));
 
 
-    // Call on_timer function every second
-    //timer_ = this->create_wall_timer( 6s, std::bind(&FrameListener::on_timer, this));
   }
 
 private:
@@ -70,25 +65,14 @@ private:
       std::ostringstream oss;
       oss << names[i] << i;
       RCLCPP_INFO(this->get_logger(), "%s", oss.str().c_str());
-      geometry_msgs::msg::Point msg_;
 
-        // Look up for the transformation between target_frame and turtle2 frames
-        // and send velocity commands for turtle2 to reach target_frame
         try {
           t = tf_buffer_->lookupTransform(oss.str(), fromFrameRel, tf2::TimePointZero);
-
-            // msg_.x = t.transform.translation.x;
-            // msg_.y = t.transform.translation.y;
-            // msg_.z = t.transform.translation.z;
 
             tf_data_detected_object_positions.push_back(std::to_string(t.transform.translation.x));
             tf_data_detected_object_positions.push_back(std::to_string(t.transform.translation.y));
             tf_data_detected_object_positions.push_back(std::to_string(t.transform.translation.z));
 
-
-            //RCLCPP_INFO(this->get_logger(), "linear x: %f  msg x: %f", t.transform.translation.x, msg_.x);
-            //RCLCPP_INFO(this->get_logger(), "linear y: %f  msg y: %f", t.transform.translation.y, msg_.y);
-            //RCLCPP_INFO(this->get_logger(), "linear z: %f  msg z: %f", t.transform.translation.z, msg_.z);
         } 
         catch (const tf2::TransformException & ex) 
         {
@@ -96,17 +80,6 @@ private:
           return;
         }
 
-
-        // msg.angular.x = t.transform.rotation.x;
-        // msg.angular.y = t.transform.rotation.y;
-        // msg.angular.z = t.transform.rotation.z;
-
-        // RCLCPP_INFO(this->get_logger(), "angular x: %f  msg x: %f", t.transform.rotation.x, msg.angular.x);
-        // RCLCPP_INFO(this->get_logger(), "angular y: %f  msg y: %f", t.transform.rotation.y, msg.angular.y);
-        // RCLCPP_INFO(this->get_logger(), "angular z: %f  msg z: %f", t.transform.rotation.z, msg.angular.z);
-
-
-        publisher_->publish(msg_);
     }
        tf_data.class_names = tf_data_class_names;
        tf_data.detected_obj_positions = tf_data_detected_object_positions;
@@ -127,8 +100,6 @@ private:
   std::shared_ptr<tf2_ros::TransformListener> tf_listener_{nullptr};
   std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
   std::string target_frame_;
-
-  
   rclcpp::Publisher<robotic_arm_msgs::msg::WorldObjectInference>::SharedPtr publisher_tf;
 };
 
