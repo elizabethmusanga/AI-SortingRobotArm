@@ -14,15 +14,17 @@ The AI-Based Sorting Robot Arm project aims to harness the power of artificial i
 
 ## Dependencies
 
-- ROS2 (Robot Operating System 2)
-- Python (version X.X.X)
-- OpenCV (version X.X.X)
-- TensorFlow or PyTorch (for AI-based object detection)
+- ROS2 (Robot Operating System 2) Humble
+- Python (version 3.10.12)
+- OpenCV (version 4.7.0.68)
+- YOLO (for AI-based object detection)
 - [List any additional dependencies]
 
 ## Installation
 
-[Provide installation instructions and prerequisites here.]
+- ROS2 Installation on Ubuntu 22.04 
+    https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html
+- 
 
 ## Usage
 
