@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 from numpy import pi
 from robotic_arm_msgs.srv import IKSolver
-from robotic_arm_msgs.msg import Yolov8Inference
+from robotic_arm_msgs.msg import WorldObjectInference
 import time
 from functools import partial
 
@@ -30,7 +30,7 @@ class IKClientNode(Node):
 
         # List to store positions of the cylinders, cubes, and hexagons containers respectively
         self.cylinders_container_pos = [-242, 20, self.placing_coord_z]
-        self.cubes_container_pos = [ -150, -230, self.placing_coord_z]
+        self.cubes_container_pos = [-150, -230, self.placing_coord_z]
         self.hexagons_container_pos = [ -150, 20, self.placing_coord_z]
 
         # Gripper States and their corresponding angles
@@ -41,10 +41,10 @@ class IKClientNode(Node):
         self.start_position = self.home_pos
         self.end_position = self.hexagons_container_pos
 
-        # Subscriber to the Yolov8 inference topic
+        # Subscriber to the worldObjectInference topic
         self.pos_subscriber = self.create_subscription(
-            Yolov8Inference,
-            '/Yolov8_Inference',
+            WorldObjectInference,
+            '/world_object_inference',
             self.object_inference_callback,
             10)
 
