@@ -7,35 +7,31 @@ from robotic_arm_msgs.srv import IKSolver
 from robotic_arm_msgs.msg import Yolov8Inference
 import time
 from functools import partial
-import keyboard
-from rclpy.timer import Timer
 
 DELAY = 5
-TRAJECTORY_HEIGHT = 120
+TRAJECTORY_HEIGHT = 200
 
-# Object pos, for testing, tobe removed
-object_pos = [100, -150, 80]
 
 class IKClientNode(Node):
     def __init__(self):
         super().__init__('ik_client_node')
-        # 
-        self.send_command: bool = False
+        
+        # Object pos, for testing, tobe removed
+        self.object_position = [190, -190, 100]
  
         # List to store previous detected objects and their positions in the scene
         self.previous_positions = []
-
-
+    
         # Z Position of the gripper when placing an object
         self.placing_coord_z = 200
 
         # Robot's home position
-        self.home_pos = [0, -220, 270]
+        self.home_pos = [13, -241, 292]
 
         # List to store positions of the cylinders, cubes, and hexagons containers respectively
-        self.cylinders_container_pos = [-250, 0, self.placing_coord_z]
+        self.cylinders_container_pos = [-242, 20, self.placing_coord_z]
         self.cubes_container_pos = [ -150, -230, self.placing_coord_z]
-        self.hexagons_container_pos = [ -150, 0, self.placing_coord_z]
+        self.hexagons_container_pos = [ -150, 20, self.placing_coord_z]
 
         # Gripper States and their corresponding angles
         self.GRIPPER_OPEN = pi/3
@@ -43,7 +39,7 @@ class IKClientNode(Node):
 
         # List to store the variable of where the object picked and is to be placed
         self.start_position = self.home_pos
-        self.end_position = self.home_pos
+        self.end_position = self.hexagons_container_pos
 
         # Subscriber to the Yolov8 inference topic
         self.pos_subscriber = self.create_subscription(
@@ -53,7 +49,7 @@ class IKClientNode(Node):
             10)
 
         
-        self.timer = self.create_timer(5.0, self.timer_callback)
+        # self.timer = self.create_timer(5.0, self.timer_callback)
         
 
     def timer_callback(self):
@@ -86,24 +82,25 @@ class IKClientNode(Node):
 
         # Construct a list of lists from the class names and object positions
         objects_and_positions = self.construct_2d_list(class_names, object_positions)
-
+        
 
         self.get_logger().info(f"Received class names: {class_names}")
         self.get_logger().info(f"Received object positions: {objects_and_positions}")
         self.get_logger().info(f"Previous object positions: {self.previous_positions}")
 
         # If the object positions are the same as the previous positions, do nothing 
-        if not self.compare_lists(objects_and_positions, self.previous_positions):
-            self.previous_positions = objects_and_positions
-
-            object_to_pick = self.first_object_to_pick_determiner(self.previous_positions)
+        if  self.compare_lists(objects_and_positions, self.previous_positions) == True:
+            self.get_logger().info("No new objects detected")
+        elif self.compare_lists(objects_and_positions, self.previous_positions) == False:
             self.get_logger().info("Object positions changed")
+            self.previous_positions = objects_and_positions
+            object_to_pick = self.first_object_to_pick_determiner(self.previous_positions)
             class_name = object_to_pick[0]
             x = int(object_to_pick[1])
             y = int(object_to_pick[2])
             z = int(object_to_pick[3])
 
-            self.start_position = [x, y, z]
+            self.object_position = [x, y, z]
 
             # Determine the end position based on the class name
             if class_name == "Cylinder":
@@ -114,14 +111,15 @@ class IKClientNode(Node):
                 self.end_position = self.hexagons_container_pos
             else:
                 self.end_position = self.home_pos
-            
-            # Pick and place the object
-            # self.pick_and_place_object()
 
             # Remove the object from the list
             self.previous_positions.pop(self.previous_positions.index(object_to_pick))
+            
+            # Pick and place the object
+            self.pick_and_place_object()
         else:
-            self.get_logger().info("No new objects detected")
+            self.get_logger().warn("No Object to Pick")
+
 
     # Callback function for the service client
     def response_callback(self, future):
@@ -155,56 +153,58 @@ class IKClientNode(Node):
                     x_closest = objects_list[object][1]
                     object_to_pick = objects_list[object]
 
-            # # Remove the object from the list
-            # objects_list.remove(object_to_pick)
-
         return object_to_pick
             
     # Define the pick and place logic
     def pick_and_place_object(self):
-
         # Open gripper
         self.service_client_setup(self.home_pos[0], self.home_pos[1], self.home_pos[2], True)
         time.sleep(DELAY)
         # Move to the object's position
-        self.service_client_setup(object_pos[0], object_pos[1], object_pos[2], True)
+        self.service_client_setup(self.object_position[0], self.object_position[1], TRAJECTORY_HEIGHT, True)
         time.sleep(DELAY)
         # Close the gripper
-        self.service_client_setup(object_pos[0], object_pos[1], object_pos[2], False)
+        self.service_client_setup(self.object_position[0], self.object_position[1], self.object_position[2], True)
+        time.sleep(DELAY)
+        # Close the gripper
+        self.service_client_setup(self.object_position[0], self.object_position[1], self.object_position[2], False)
         time.sleep(DELAY)
         # Move to trajectory height to avoid collisiom
-        self.service_client_setup(object_pos[0], object_pos[1], TRAJECTORY_HEIGHT, False)
+        self.service_client_setup(self.object_position[0], self.object_position[1], TRAJECTORY_HEIGHT, False)
         time.sleep(DELAY)
         # Move to the placing position
-        self.service_client_setup(self.cubes_container_pos[0], self.cubes_container_pos[1], self.cubes_container_pos[2], False)
+        self.service_client_setup(self.end_position[0], self.end_position[1], self.end_position[2], False)
         time.sleep(DELAY)
         # Dropping the object
-        self.service_client_setup(self.cubes_container_pos[0], self.cubes_container_pos[1], self.cubes_container_pos[2], True)
+        self.service_client_setup(self.end_position[0], self.end_position[1], self.end_position[2], True)
         time.sleep(DELAY)
         # Open the gripper
         self.service_client_setup(self.end_position[0], self.end_position[1], self.end_position[2], False)
         time.sleep(DELAY)
+        # Return to home position
+        self.service_client_setup(self.home_pos[0], self.home_pos[1], self.home_pos[2], False)
+        time.sleep(DELAY)
 
-        # # Return to home position
-        # self.service_client_setup(self.home_pos[0], self.home_pos[1], self.home_pos[2], False)
-
-        # self.send_command = False
 
     # Function to compare two lists
     def compare_lists(self, list1, list2):
         # List1 and list2 are lists of lists
         # If the lists are of the same length, compare the elements
-        if len(list1) != len(list2):
-            return False
+        if len(list1) == 0:
+            return None
         else:
-            # If the lists are of the same length, compare the first elements of each list
-            for i in range(len(list1)):
-                if list1[i][0] != list2[i][0]:
-                    return False
-                else:
-                    continue
+            if len(list1) != len(list2):
+                return False
+            else:
+                # If the lists are of the same length, compare the first elements of each list
+                for i in range(len(list1)):
+                    if list1[i][0] != list2[i][0]:
+                        return False
+                    else:
+                        continue
                 
             return True
+        
             
 
     # Function to construct a list of lists from 2 lists
