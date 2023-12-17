@@ -35,7 +35,7 @@ endif()
 install(
   DIRECTORY
     ${PROJECT_NAME}
-    launch
+    launch Computer_Vision_Models test_files
   DESTINATION
     share/${PROJECT_NAME}/
 )

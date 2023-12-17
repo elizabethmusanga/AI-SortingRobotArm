@@ -9,6 +9,8 @@ import cv2                              # OpenCV image processing library
 from ultralytics import YOLO            # YOLOv5 object detection library
 import numpy as np                      # Python numerical computing library
 import cv2.aruco as aruco               # ArUco marker library
+import os
+from ament_index_python.packages import get_package_share_directory
 
 from robotic_arm_msgs.msg import ObjectInference    # Custom message type
 from robotic_arm_msgs.msg import Yolov8Inference    # Custom message type
@@ -34,8 +36,11 @@ class ImageSubscriber(Node):
         
         self.camera_matrix = np.array([[650, 0, 320], [0, 650, 240], [0, 0, 1]], dtype=np.float32)
         self.dist_coeffs = np.zeros((4, 1), dtype=np.float32)
+        #robotic_arm_recognition
+        location_path = os.path.join(get_package_share_directory("robotic_arm_recognition"), "Computer_Vision_Models", "5best.pt")
 
-        self.model = YOLO("/home/newton/ROS2/ai_based_sorting_robotic_arm/src/AI-SortingRobotArm/Computer Vision Models/5best.pt") # Load the YOLOv5 model  
+
+        self.model = YOLO(location_path) # Load the YOLOv5 model  
         
         self.yolov8_inference = Yolov8Inference()               # Create a custom message object
         self.object_inference = ObjectInference()               # Create a custom message object

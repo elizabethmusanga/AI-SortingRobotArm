@@ -7,6 +7,9 @@ import math
 import time
 from ultralytics import YOLO
 
+import os
+from ament_index_python.packages import get_package_share_directory
+
 def detect_aruco_and_get_reference_center(frame, aruco_dict, aruco_marker_size_mm, camera_matrix, dist_coeffs):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     dictionary = aruco.getPredefinedDictionary(aruco_dict)
@@ -53,8 +56,9 @@ def recognize_and_position_object():
     window_height = 768
     cv2.namedWindow("Image", cv2.WINDOW_NORMAL)  # Create a resizable window
     cv2.resizeWindow("Image", window_width, window_height)
+    location_path = os.path.join(get_package_share_directory("robotic_arm_recognition"), "test_files", "trained_model.pt")
 
-    model = YOLO("/home/newton/ROS2/ai_based_sorting_robotic_arm/src/AI-SortingRobotArm/test_files/trained_model.pt")
+    model = YOLO(location_path)
     classNames = ['Black-A', 'Red-A', 'Green-A', 'Cube', 'Hexagon', 'Cylinder']
 
     aruco_dict_type = aruco.DICT_4X4_50
