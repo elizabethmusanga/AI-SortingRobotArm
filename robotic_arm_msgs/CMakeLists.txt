@@ -25,6 +25,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/ObjectInference.msg"
   "msg/Yolov8Inference.msg"
   "srv/IKSolver.srv"
+  "msg/WorldObjectInference.msg"
   DEPENDENCIES std_msgs
 )
 

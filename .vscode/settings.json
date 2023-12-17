@@ -1,4 +1,30 @@
 {
     "ros.distro": "humble",
-    "cmake.sourceDirectory": "/home/newtonjeri/ai_based_sorting_robot_arm/src/AI-SortingRobotArm/robotic_arm_controllers"
+    "cmake.sourceDirectory": "/home/kevo/ros_ws/src/ai_sorting/src/AI-SortingRobotArm/robotic_arm_bringup",
+    "python.autoComplete.extraPaths": [
+        "/home/kevo/ros_ws/src/ai_sorting/install/robotic_arm_msgs/local/lib/python3.10/dist-packages",
+        "/home/kevo/ros_ws/src/ai_sorting/install/robotic_arm_firmware/local/lib/python3.10/dist-packages",
+        "/home/kevo/ros_ws/src/ai_sorting/install/robotic_arm_custom_nodes/lib/python3.10/site-packages",
+        "/home/kevo/ros_ws/src/ai_sorting/install/robotic_arm_controllers/local/lib/python3.10/dist-packages",
+        "/home/kevo/ros_ws/src/ai_sorting/install/robotic_arm_camera/lib/python3.10/site-packages",
+        "/home/kevo/ws_moveit2/install/moveit_configs_utils/lib/python3.10/site-packages",
+        "/home/kevo/ws_moveit2/install/srdfdom/local/lib/python3.10/dist-packages",
+        "/home/kevo/ws_moveit2/install/moveit_task_constructor_msgs/local/lib/python3.10/dist-packages",
+        "/home/kevo/ws_moveit2/install/launch_param_builder/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/kevo/ros_ws/src/ai_sorting/install/robotic_arm_msgs/local/lib/python3.10/dist-packages",
+        "/home/kevo/ros_ws/src/ai_sorting/install/robotic_arm_firmware/local/lib/python3.10/dist-packages",
+        "/home/kevo/ros_ws/src/ai_sorting/install/robotic_arm_custom_nodes/lib/python3.10/site-packages",
+        "/home/kevo/ros_ws/src/ai_sorting/install/robotic_arm_controllers/local/lib/python3.10/dist-packages",
+        "/home/kevo/ros_ws/src/ai_sorting/install/robotic_arm_camera/lib/python3.10/site-packages",
+        "/home/kevo/ws_moveit2/install/moveit_configs_utils/lib/python3.10/site-packages",
+        "/home/kevo/ws_moveit2/install/srdfdom/local/lib/python3.10/dist-packages",
+        "/home/kevo/ws_moveit2/install/moveit_task_constructor_msgs/local/lib/python3.10/dist-packages",
+        "/home/kevo/ws_moveit2/install/launch_param_builder/lib/python3.10/site-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
 }

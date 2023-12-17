@@ -8,7 +8,8 @@ from cv_bridge import CvBridge
 import cv2.aruco as aruco
 import cv2
 import numpy as np
-
+from ament_index_python.packages import get_package_share_directory
+import os
 
 from robotic_arm_msgs.msg import ObjectInference
 from robotic_arm_msgs.msg import Yolov8Inference
@@ -30,8 +31,9 @@ class Camera_subscriber(Node):
 
         self.aruco_dict_type = aruco.DICT_4X4_50                # Define the ArUco marker dictionary type
         self.aruco_marker_size_mm = ARUCO_MARKER_SIZE_MM   
+        location_path = os.path.join(get_package_share_directory("robotic_arm_recognition"), "Computer_Vision_Models", "5best.pt")
 
-        self.model = YOLO("/home/newton/ROS2/ai_based_sorting_robotic_arm/src/AI-SortingRobotArm/Computer Vision Models/5best.pt")
+        self.model = YOLO(location_path)
 
         self.yolov8_inference = Yolov8Inference()
         self.object_inference = ObjectInference()
@@ -44,7 +46,7 @@ class Camera_subscriber(Node):
             'rgb_cam/image_raw',
             self.camera_call_back,
             10)
-        self.subscription 
+        
 
         self.yolov8_pub = self.create_publisher(Yolov8Inference, "/Yolov8_Inference", 1)
         self.img_pub = self.create_publisher(Image, "/object_inference", 1)
@@ -176,7 +178,7 @@ class Camera_subscriber(Node):
 
     def camera_call_back(self, data):
         self.get_logger().info('Receiving video frame')         # Output log information indicating that the callback function has been entered
-        image = self.cv2_bridge.imgmsg_to_cv2(data, 'bgr8')      # Convert the ROS image message to an OpenCV image
+        image = self.cv2_bridge.imgmsg_to_cv2(data, 'bgr8')     # Convert the ROS image message to an OpenCV image
         self.detect_and_position_object(image)                  # Object detection and positioning
 
 

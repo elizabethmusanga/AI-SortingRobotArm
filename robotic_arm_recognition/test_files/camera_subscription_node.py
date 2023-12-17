@@ -12,13 +12,19 @@ import numpy as np
 import cv2.aruco as aruco
 import time
 
+import os
+from ament_index_python.packages import get_package_share_directory
+
 class ObjectRecognitionNode(Node):
     def __init__(self):
         super().__init__('object_recognition_node')
+        location_path = os.path.join(get_package_share_directory("robotic_arm_recognition"), "test_files", "trained_model.pt")
+
+        
         self.declare_parameters(
             namespace='',
             parameters=[
-                ('model_path', '/home/newton/ROS2/ai_based_sorting_robotic_arm/src/AI-SortingRobotArm/test_files/trained_model.pt'),
+                ('model_path', location_path),
             ]
         )
 
