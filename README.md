@@ -63,16 +63,22 @@ Launch the packages in the following order:
    OR, if using a physical camera:
    ```bash
    ros2 launch robotic_arm_camera robot_arm_camera.launch.py
+   ```
+3. Transformation of the dynamic links (detected objects)
+   ```bash
    ros2 launch robotic_arm_transforms transforms.launch.xml
+   ```
+4. Solving the IK problems and computing the forward kinematics
+   ```bash
    ros2 launch robotic_arm_kinematics robotic_arm_kinematics.launch.py
    ```
 
-3. Launch all packages together:
-   - For simulation:
+All the packages can be launch using this single command
+   - Simulation:
      ```bash
      ros2 launch robotic_arm_bringup sim_robotic_arm.launch.py
      ```
-   - For a real robot:
+   - Real robot:
      ```bash
      ros2 launch robotic_arm_bringup real_robotic_arm.launch.py
      ```
