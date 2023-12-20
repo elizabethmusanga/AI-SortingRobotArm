@@ -37,17 +37,13 @@ Update the documentation to reflect any code changes. If new features or changes
 
 All pull requests will be reviewed by our team. We appreciate your patience during this process.
 
-## Code of Conduct
-
-This project follows the [Code of Conduct](CODE_OF_CONDUCT.md). Please review it before participating.
-
 ## License Agreement
 
 By contributing to this project, you agree that your contributions will be licensed under the [MIT License](LICENSE.md).
 
 ## Communication
 
-If you have questions or need clarification, feel free to [contact us](#contact).
+If you have questions or need clarification, feel free to [contact us](contact.txt).
 
 ## Acknowledgment
 
