@@ -42,11 +42,6 @@ pluginlib_export_plugin_description_file(hardware_interface robotic_arm_hw_plugi
 
 ament_python_install_package(${PROJECT_NAME})
 
-# install(TARGETS
-#   slider_control
-#   DESTINATION lib/${PROJECT_NAME}
-# )
-
 install(
   TARGETS ${PROJECT_NAME}
   DESTINATION lib
@@ -55,7 +50,7 @@ install(
 install(
   DIRECTORY include
   DESTINATION include
-)
+)z
 
 install(
   DIRECTORY launch config
