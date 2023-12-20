@@ -151,5 +151,4 @@ Explore these resources to delve deeper into ROS2, control systems, and gain pra
 Feel free to leverage these resources to enhance your knowledge and proficiency in the field of robotics and ROS2.
 
 *Note: The provided links are accurate as of the last update, and users are encouraged to verify the links for the latest information.*
-```
 
