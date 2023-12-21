@@ -32,19 +32,34 @@ The AI-Based Sorting Robot Arm project integrates artificial intelligence with R
 
 3. **OpenCV (version 4.7.0.68) using PIP:**
    ```bash
-   pip install opencv-python==4.7.0.68
+    pip install opencv-python==4.7.0.68
    ```
 
 4. **YOLO (for AI-based object detection):**
    ```bash
-   pip install ultralytics
+    pip install ultralytics
    ```
 
 5. **C++ Serial Library:**
    ```bash
-   sudo apt-get install libserial-dev
+    sudo apt-get install libserial-dev
    ```
-
+6. **ros2 control:**
+    ```bash
+    sudo apt-get install ros-humble-ros2-control
+    ```
+7. **gazebo ros2 control:**
+    ```bash
+    sudo apt-get install ros-humble-gazebo-ros2-control
+    ```
+8. **ros2 controllers:**
+    ```bash
+    sudo apt-get install ros-humble-ros2-controllers
+    ```
+9. **xacro:**
+    ```bash
+    sudo apt-get install ros-humble-xacro
+  ```
 ## Usage
 
 Launch the packages in the following order:

@@ -50,7 +50,7 @@ install(
 install(
   DIRECTORY include
   DESTINATION include
-)z
+)
 
 install(
   DIRECTORY launch config

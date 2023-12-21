@@ -53,24 +53,11 @@ def generate_launch_description():
         
     )
 
-    #RVIZ pnode.
-      # Get the file path of the configuration file to load
-    rviz_config_file = os.path.join(get_package_share_directory(package_name), "rviz_configs", "rviz_sim.rviz")
-
-    rviz_node = Node(
-            package='rviz2',
-            executable='rviz2',
-            name='rviz2',
-            arguments=['-d', rviz_config_file],
-            output='screen'
-        )
-    
     
     return LaunchDescription([
         env_var,
         model_arg,
         robot_state_publisher,
         gazebo_node,
-        spawner_node,
-        rviz_node,
+        spawner_node
     ])

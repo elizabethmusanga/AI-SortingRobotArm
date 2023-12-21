@@ -32,13 +32,21 @@ def generate_launch_description():
     )
     
     
-    camera = IncludeLaunchDescription(
-            os.path.join(
-                get_package_share_directory("robotic_arm_camera"),
-                "launch",
-                "robot_arm_camera.launch.py"
-            ),
+    sim_camera = IncludeLaunchDescription(
+        os.path.join(
+            get_package_share_directory("robotic_arm_recognition"),
+            "launch",
+            "robotic_arm_recognition_model.launch.py"
         )
+    )
+    
+    transforms = IncludeLaunchDescription(
+            os.path.join(
+                get_package_share_directory("robotic_arm_transforms"),
+                "launch",
+                "transforms.launch.xml"
+            )
+    )
     
     kinematics = IncludeLaunchDescription(
             os.path.join(
@@ -51,7 +59,8 @@ def generate_launch_description():
     return LaunchDescription([
         rviz,
         gazebo,
-        camera,
         controllers,
-        kinematics
+        # sim_camera,
+        # kinematics,
+        # transforms
     ])
