@@ -69,9 +69,9 @@ private:
         try {
           t = tf_buffer_->lookupTransform(oss.str(), fromFrameRel, tf2::TimePointZero);
 
-            tf_data_detected_object_positions.push_back(std::to_string(t.transform.translation.x));
-            tf_data_detected_object_positions.push_back(std::to_string(t.transform.translation.y));
-            tf_data_detected_object_positions.push_back(std::to_string(t.transform.translation.z));
+            tf_data_detected_object_positions.push_back(std::to_string(-(int)(t.transform.translation.x * 1000)));
+            tf_data_detected_object_positions.push_back(std::to_string(-(int)(t.transform.translation.y * 1000)));
+            tf_data_detected_object_positions.push_back(std::to_string((int)(t.transform.translation.z * 1000)));
 
         } 
         catch (const tf2::TransformException & ex) 

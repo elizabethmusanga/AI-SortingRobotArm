@@ -5,16 +5,15 @@ import numpy as np
 import rclpy
 import ikpy.chain
 from rclpy.node import Node
-import serial, time
+import serial
 
 from builtin_interfaces.msg import Duration
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-from sensor_msgs.msg import JointState
-
 from ament_index_python.packages import get_package_share_directory
 
 from robotic_arm_msgs.srv import IKSolver
 
+# Robotic arm Home position
 HOME_POSITION = [np.pi/2, np.pi/2, np.pi/2, np.pi/2, 0.0]
 
 # URDF file of the robot

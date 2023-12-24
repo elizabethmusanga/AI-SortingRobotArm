@@ -9,7 +9,8 @@ import time
 from functools import partial
 
 DELAY = 5
-TRAJECTORY_HEIGHT = 200
+PICKING_HEIGHT = 80
+TRAJECTORY_HEIGHT = 230
 
 
 class IKClientNode(Node):
@@ -17,7 +18,7 @@ class IKClientNode(Node):
         super().__init__('ik_client_node')
         
         # Object pos, for testing, tobe removed
-        self.object_position = [190, -190, 100]
+        self.object_position = []
  
         # List to store previous detected objects and their positions in the scene
         self.previous_positions = []
@@ -35,7 +36,7 @@ class IKClientNode(Node):
 
         # Gripper States and their corresponding angles
         self.GRIPPER_OPEN = pi/3
-        self.GRIPPER_CLOSE = pi/6
+        self.GRIPPER_CLOSE = pi/5
 
         # List to store the variable of where the object picked and is to be placed
         self.start_position = self.home_pos
@@ -98,9 +99,10 @@ class IKClientNode(Node):
             class_name = object_to_pick[0]
             x = int(object_to_pick[1])
             y = int(object_to_pick[2])
-            z = int(object_to_pick[3])
+            z = PICKING_HEIGHT
 
             self.object_position = [x, y, z]
+            self.get_logger().info(f"Object Positions : {self.object_position}")
 
             # Determine the end position based on the class name
             if class_name == "Cylinder":

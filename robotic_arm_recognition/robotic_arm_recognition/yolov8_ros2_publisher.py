@@ -16,7 +16,7 @@ from robotic_arm_msgs.msg import Yolov8Inference
 
 
 # Define the picking height of the robotic arm
-PICKING_HEIGHT = 50
+PICKING_HEIGHT = 120
 
 # Define the x-axis drift of the robotic arm
 ARUCO_MARKER_SIZE_MM = 34
