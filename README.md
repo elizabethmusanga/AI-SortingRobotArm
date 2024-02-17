@@ -139,7 +139,7 @@ These contributions have significantly enriched our project, providing essential
 ## Contact
 
 - Newton Kariuki: newtonkariuki1999@gmail.com
-- Kevin Kipkorir
+- Kevin Kipkorir: kipkorir.magut254@gmail.com
 - Joseph Kuria
 - Geoffrey Theuri
 - Elizabeth Musanga
